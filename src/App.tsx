@@ -1190,11 +1190,7 @@ const LoginPage = ({ onLogin }: { onLogin: (user: any) => void }) => {
       <div className="relative z-20 flex flex-col items-center w-full max-w-md px-6">
         {/* Logo Section */}
         <div className="mb-8 flex flex-col items-center">
-          <div className="w-20 h-20 rounded-[24px] bg-[#3b82f6] flex flex-col items-center justify-center text-white shadow-2xl shadow-blue-500/30 mb-4 p-2">
-            <span className="text-3xl font-black leading-none">100</span>
-            <span className="text-[10px] font-black tracking-widest uppercase mt-0.5">Days</span>
-            <span className="text-[5px] font-bold tracking-[0.2em] uppercase opacity-80 mt-1">Of My Journey</span>
-          </div>
+          <img src="/favicon.svg" alt="100 Days Challenge" className="w-20 h-20 mb-4" />
           <h1 className="text-3xl font-black text-white tracking-tight">100 Days App</h1>
           <p className="text-gray-400 text-sm font-medium mt-1">Admin Panel</p>
         </div>
@@ -1316,9 +1312,7 @@ export default function App() {
       {/* Sidebar */}
       <aside className="w-64 border-r border-white/5 bg-dark-900 hidden lg:flex flex-col shrink-0">
         <div className="p-6 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-electric-blue to-electric-purple flex items-center justify-center font-bold text-white shadow-lg shadow-electric-blue/20">
-            <Zap className="w-6 h-6 fill-white" />
-          </div>
+          <img src="/favicon.svg" alt="100 Days Challenge" className="w-10 h-10" />
           <span className="text-xl font-bold tracking-tight">100<span className="text-electric-blue">Days</span></span>
         </div>
 
