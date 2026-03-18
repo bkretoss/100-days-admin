@@ -44,7 +44,7 @@ import {
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart, LineChart, Line } from "recharts";
 import { motion, AnimatePresence } from "motion/react";
 import { Toaster, toast } from "sonner";
-import { cn } from "./lib/utils";
+import { cn, formatDate, fromInputDate, toInputDate } from "./lib/utils";
 
 // --- Mock Data ---
 
@@ -60,16 +60,6 @@ const STATS = [
     glow: "neon-glow-blue",
   },
   {
-    label: "Active Subscriptions",
-    value: "8",
-    change: "+8.2%",
-    trend: "up",
-    icon: Trophy,
-    color: "text-electric-purple",
-    bg: "bg-electric-purple/10",
-    glow: "neon-glow-purple",
-  },
-  {
     label: "Completed Challenges",
     value: "156",
     change: "+42%",
@@ -78,6 +68,16 @@ const STATS = [
     color: "text-green-400",
     bg: "bg-green-500/10",
     glow: "",
+  },
+  {
+    label: "Active Subscriptions",
+    value: "8",
+    change: "+8.2%",
+    trend: "up",
+    icon: Trophy,
+    color: "text-electric-purple",
+    bg: "bg-electric-purple/10",
+    glow: "neon-glow-purple",
   },
   {
     label: "Expired Subscriptions",
@@ -136,9 +136,9 @@ const USERS = [
     progress: 67,
     status: "Active",
     streak: 45,
-    joinedDate: "Oct 12, 2023",
-    startDate: "Oct 12, 2023",
-    endDate: "Jan 20, 2024",
+    joinedDate: "12-10-2023",
+    startDate: "12-10-2023",
+    endDate: "20-01-2024",
     about: "Passionate developer focusing on high-performance web applications.",
     couponUsed: "WELCOME20",
   },
@@ -153,9 +153,9 @@ const USERS = [
     progress: 34,
     status: "Active",
     streak: 32,
-    joinedDate: "Jan 15, 2024",
-    startDate: "Jan 15, 2024",
-    endDate: "Apr 25, 2024",
+    joinedDate: "15-01-2024",
+    startDate: "15-01-2024",
+    endDate: "25-04-2024",
     about: "Fitness enthusiast and software engineer.",
     couponUsed: null,
   },
@@ -170,9 +170,9 @@ const USERS = [
     progress: 89,
     status: "Active",
     streak: 89,
-    joinedDate: "May 05, 2023",
-    startDate: "May 05, 2023",
-    endDate: "Aug 13, 2023",
+    joinedDate: "05-05-2023",
+    startDate: "05-05-2023",
+    endDate: "13-08-2023",
     about: "Bookworm exploring new genres.",
     couponUsed: "SUMMER50",
   },
@@ -187,9 +187,9 @@ const USERS = [
     progress: 12,
     status: "Paused",
     streak: 12,
-    joinedDate: "Jan 01, 2024",
-    startDate: "Jan 01, 2024",
-    endDate: "Apr 10, 2024",
+    joinedDate: "01-01-2024",
+    startDate: "01-01-2024",
+    endDate: "10-04-2024",
     about: "Mindfulness practitioner.",
     couponUsed: "ELITE100",
   },
@@ -204,9 +204,9 @@ const USERS = [
     progress: 100,
     status: "Completed",
     streak: 100,
-    joinedDate: "May 20, 2023",
-    startDate: "May 20, 2023",
-    endDate: "Aug 28, 2023",
+    joinedDate: "20-05-2023",
+    startDate: "20-05-2023",
+    endDate: "28-08-2023",
     about: "Aspiring novelist.",
     couponUsed: null,
   },
@@ -221,9 +221,9 @@ const USERS = [
     progress: 13,
     status: "Active",
     streak: 13,
-    joinedDate: "Mar 01, 2024",
-    startDate: "Mar 01, 2024",
-    endDate: "Jun 09, 2024",
+    joinedDate: "01-03-2024",
+    startDate: "01-03-2024",
+    endDate: "09-06-2024",
     about: "Music lover.",
     couponUsed: "WELCOME20",
   },
@@ -238,9 +238,9 @@ const USERS = [
     progress: 45,
     status: "Expired",
     streak: 45,
-    joinedDate: "Feb 10, 2024",
-    startDate: "Feb 10, 2024",
-    endDate: "May 21, 2024",
+    joinedDate: "10-02-2024",
+    startDate: "10-02-2024",
+    endDate: "21-05-2024",
     about: "Staying in shape.",
     couponUsed: null,
   },
@@ -255,9 +255,9 @@ const USERS = [
     progress: 100,
     status: "Completed",
     streak: 100,
-    joinedDate: "Jun 15, 2023",
-    startDate: "Jun 15, 2023",
-    endDate: "Sep 23, 2023",
+    joinedDate: "15-06-2023",
+    startDate: "15-06-2023",
+    endDate: "23-09-2023",
     about: "Finding balance.",
     couponUsed: "SUMMER50",
   },
@@ -272,9 +272,9 @@ const USERS = [
     progress: 5,
     status: "Expired",
     streak: 0,
-    joinedDate: "Jan 10, 2024",
-    startDate: "Jan 10, 2024",
-    endDate: "Apr 20, 2024",
+    joinedDate: "10-01-2024",
+    startDate: "10-01-2024",
+    endDate: "20-04-2024",
     about: "Method acting.",
     couponUsed: "NEWYEAR2024",
   },
@@ -289,9 +289,9 @@ const USERS = [
     progress: 78,
     status: "Active",
     streak: 78,
-    joinedDate: "Dec 01, 2023",
-    startDate: "Dec 01, 2023",
-    endDate: "Mar 10, 2024",
+    joinedDate: "01-12-2023",
+    startDate: "01-12-2023",
+    endDate: "10-03-2024",
     about: "Polyglot in training.",
     couponUsed: null,
   },
@@ -306,9 +306,9 @@ const USERS = [
     progress: 22,
     status: "Active",
     streak: 22,
-    joinedDate: "Feb 20, 2024",
-    startDate: "Feb 20, 2024",
-    endDate: "May 31, 2024",
+    joinedDate: "20-02-2024",
+    startDate: "20-02-2024",
+    endDate: "31-05-2024",
     about: "Flipping around.",
     couponUsed: "WELCOME20",
   },
@@ -323,9 +323,9 @@ const USERS = [
     progress: 95,
     status: "Active",
     streak: 95,
-    joinedDate: "Nov 15, 2023",
-    startDate: "Nov 15, 2023",
-    endDate: "Feb 23, 2024",
+    joinedDate: "15-11-2023",
+    startDate: "15-11-2023",
+    endDate: "23-02-2024",
     about: "Dancing through life.",
     couponUsed: null,
   },
@@ -391,8 +391,10 @@ const COUPONS = [
     status: "active",
     usageCount: 145,
     usageLimit: 500,
-    expiryDate: "2024-12-31",
+    startDate: "01-01-2024",
+    expiryDate: "31-12-2024",
     description: "Welcome discount for new users",
+    deviceTypes: ["android", "ios"],
   },
   {
     id: 2,
@@ -402,8 +404,10 @@ const COUPONS = [
     status: "active",
     usageCount: 89,
     usageLimit: 200,
-    expiryDate: "2024-08-31",
+    startDate: "01-06-2024",
+    expiryDate: "31-08-2024",
     description: "Summer special offer",
+    deviceTypes: ["android"],
   },
   {
     id: 3,
@@ -413,8 +417,10 @@ const COUPONS = [
     status: "expired",
     usageCount: 200,
     usageLimit: 200,
-    expiryDate: "2024-01-15",
+    startDate: "01-12-2023",
+    expiryDate: "15-01-2024",
     description: "Elite plan discount",
+    deviceTypes: ["ios"],
   },
   {
     id: 4,
@@ -424,8 +430,10 @@ const COUPONS = [
     status: "inactive",
     usageCount: 0,
     usageLimit: 1000,
-    expiryDate: "2024-12-31",
+    startDate: "01-01-2024",
+    expiryDate: "31-12-2024",
     description: "New Year promotion",
+    deviceTypes: ["android", "ios"],
   },
 ];
 
@@ -437,9 +445,10 @@ const SUBSCRIPTIONS = [
     userName: "Sarah Chen",
     plan: "Yearly",
     status: "Active",
-    startDate: "Oct 12, 2023",
-    endDate: "Oct 12, 2024",
+    startDate: "12-10-2023",
+    endDate: "12-10-2024",
     couponCode: "WELCOME20",
+    device_type: "ios",
   },
   {
     id: 13,
@@ -447,9 +456,10 @@ const SUBSCRIPTIONS = [
     userName: "Sarah Chen",
     plan: "Monthly",
     status: "Expired",
-    startDate: "Jul 10, 2023",
-    endDate: "Aug 10, 2023",
+    startDate: "10-07-2023",
+    endDate: "10-08-2023",
     couponCode: null,
+    device_type: "ios",
   },
   {
     id: 14,
@@ -457,9 +467,10 @@ const SUBSCRIPTIONS = [
     userName: "Sarah Chen",
     plan: "Monthly",
     status: "Expired",
-    startDate: "Aug 10, 2023",
-    endDate: "Sep 10, 2023",
+    startDate: "10-08-2023",
+    endDate: "10-09-2023",
     couponCode: null,
+    device_type: "ios",
   },
 
   // Marcus Johnson - Multiple subscriptions
@@ -469,9 +480,10 @@ const SUBSCRIPTIONS = [
     userName: "Marcus Johnson",
     plan: "Monthly",
     status: "Active",
-    startDate: "Jan 15, 2024",
-    endDate: "Feb 15, 2024",
+    startDate: "15-01-2024",
+    endDate: "15-02-2024",
     couponCode: null,
+    device_type: "android",
   },
   {
     id: 15,
@@ -479,9 +491,10 @@ const SUBSCRIPTIONS = [
     userName: "Marcus Johnson",
     plan: "Monthly",
     status: "Expired",
-    startDate: "Dec 15, 2023",
-    endDate: "Jan 15, 2024",
+    startDate: "15-12-2023",
+    endDate: "15-01-2024",
     couponCode: "WELCOME20",
+    device_type: "android",
   },
 
   // Emily Davis - Multiple subscriptions
@@ -491,9 +504,10 @@ const SUBSCRIPTIONS = [
     userName: "Emily Davis",
     plan: "Monthly",
     status: "Active",
-    startDate: "May 05, 2023",
-    endDate: "Jun 05, 2023",
+    startDate: "05-05-2023",
+    endDate: "05-06-2023",
     couponCode: "SUMMER50",
+    device_type: "android",
   },
   {
     id: 16,
@@ -501,9 +515,10 @@ const SUBSCRIPTIONS = [
     userName: "Emily Davis",
     plan: "Monthly",
     status: "Expired",
-    startDate: "Apr 05, 2023",
-    endDate: "May 05, 2023",
+    startDate: "05-04-2023",
+    endDate: "05-05-2023",
     couponCode: null,
+    device_type: "android",
   },
   {
     id: 17,
@@ -511,9 +526,10 @@ const SUBSCRIPTIONS = [
     userName: "Emily Davis",
     plan: "Yearly",
     status: "Expired",
-    startDate: "Apr 05, 2022",
-    endDate: "Apr 05, 2023",
+    startDate: "05-04-2022",
+    endDate: "05-04-2023",
     couponCode: "ELITE100",
+    device_type: "android",
   },
 
   // Alex Rivera
@@ -523,9 +539,10 @@ const SUBSCRIPTIONS = [
     userName: "Alex Rivera",
     plan: "Yearly",
     status: "Active",
-    startDate: "Jan 01, 2024",
-    endDate: "Jan 01, 2025",
+    startDate: "01-01-2024",
+    endDate: "01-01-2025",
     couponCode: "ELITE100",
+    device_type: "ios",
   },
 
   // Jordan Lee - Multiple subscriptions
@@ -535,9 +552,10 @@ const SUBSCRIPTIONS = [
     userName: "Jordan Lee",
     plan: "Monthly",
     status: "Expired",
-    startDate: "May 20, 2023",
-    endDate: "Jun 20, 2023",
+    startDate: "20-05-2023",
+    endDate: "20-06-2023",
     couponCode: null,
+    device_type: "android",
   },
   {
     id: 18,
@@ -545,9 +563,10 @@ const SUBSCRIPTIONS = [
     userName: "Jordan Lee",
     plan: "Monthly",
     status: "Expired",
-    startDate: "Apr 20, 2023",
-    endDate: "May 20, 2023",
+    startDate: "20-04-2023",
+    endDate: "20-05-2023",
     couponCode: null,
+    device_type: "android",
   },
   {
     id: 19,
@@ -555,9 +574,10 @@ const SUBSCRIPTIONS = [
     userName: "Jordan Lee",
     plan: "Yearly",
     status: "Expired",
-    startDate: "Apr 20, 2022",
-    endDate: "Apr 20, 2023",
+    startDate: "20-04-2022",
+    endDate: "20-04-2023",
     couponCode: "WELCOME20",
+    device_type: "android",
   },
 
   // Taylor Swift
@@ -567,9 +587,10 @@ const SUBSCRIPTIONS = [
     userName: "Taylor Swift",
     plan: "Yearly",
     status: "Active",
-    startDate: "Mar 01, 2024",
-    endDate: "Mar 01, 2025",
+    startDate: "01-03-2024",
+    endDate: "01-03-2025",
     couponCode: "WELCOME20",
+    device_type: "ios",
   },
 
   // Chris Evans - Multiple subscriptions
@@ -579,9 +600,10 @@ const SUBSCRIPTIONS = [
     userName: "Chris Evans",
     plan: "Yearly",
     status: "Expired",
-    startDate: "Feb 10, 2024",
-    endDate: "Feb 10, 2025",
+    startDate: "10-02-2024",
+    endDate: "10-02-2025",
     couponCode: null,
+    device_type: "android",
   },
   {
     id: 20,
@@ -589,9 +611,10 @@ const SUBSCRIPTIONS = [
     userName: "Chris Evans",
     plan: "Monthly",
     status: "Expired",
-    startDate: "Jan 10, 2024",
-    endDate: "Feb 10, 2024",
+    startDate: "10-01-2024",
+    endDate: "10-02-2024",
     couponCode: "SUMMER50",
+    device_type: "android",
   },
   {
     id: 21,
@@ -599,9 +622,10 @@ const SUBSCRIPTIONS = [
     userName: "Chris Evans",
     plan: "Monthly",
     status: "Expired",
-    startDate: "Dec 10, 2023",
-    endDate: "Jan 10, 2024",
+    startDate: "10-12-2023",
+    endDate: "10-01-2024",
     couponCode: null,
+    device_type: "android",
   },
 
   // Zoe Kravitz - Multiple subscriptions
@@ -611,9 +635,10 @@ const SUBSCRIPTIONS = [
     userName: "Zoe Kravitz",
     plan: "Monthly",
     status: "Expired",
-    startDate: "Jun 15, 2023",
-    endDate: "Jul 15, 2023",
+    startDate: "15-06-2023",
+    endDate: "15-07-2023",
     couponCode: "SUMMER50",
+    device_type: "ios",
   },
   {
     id: 22,
@@ -621,9 +646,10 @@ const SUBSCRIPTIONS = [
     userName: "Zoe Kravitz",
     plan: "Yearly",
     status: "Expired",
-    startDate: "Jun 15, 2022",
-    endDate: "Jun 15, 2023",
+    startDate: "15-06-2022",
+    endDate: "15-06-2023",
     couponCode: null,
+    device_type: "ios",
   },
 
   // Robert Downey
@@ -633,9 +659,10 @@ const SUBSCRIPTIONS = [
     userName: "Robert Downey",
     plan: "Monthly",
     status: "Expired",
-    startDate: "Jan 10, 2024",
-    endDate: "Feb 10, 2024",
+    startDate: "10-01-2024",
+    endDate: "10-02-2024",
     couponCode: "NEWYEAR2024",
+    device_type: "android",
   },
 
   // Scarlett Johansson - Multiple subscriptions
@@ -645,9 +672,10 @@ const SUBSCRIPTIONS = [
     userName: "Scarlett Johansson",
     plan: "Yearly",
     status: "Active",
-    startDate: "Dec 01, 2023",
-    endDate: "Dec 01, 2024",
+    startDate: "01-12-2023",
+    endDate: "01-12-2024",
     couponCode: null,
+    device_type: "ios",
   },
   {
     id: 23,
@@ -655,9 +683,10 @@ const SUBSCRIPTIONS = [
     userName: "Scarlett Johansson",
     plan: "Monthly",
     status: "Expired",
-    startDate: "Nov 01, 2023",
-    endDate: "Dec 01, 2023",
+    startDate: "01-11-2023",
+    endDate: "01-12-2023",
     couponCode: "WELCOME20",
+    device_type: "ios",
   },
   {
     id: 24,
@@ -665,9 +694,10 @@ const SUBSCRIPTIONS = [
     userName: "Scarlett Johansson",
     plan: "Monthly",
     status: "Expired",
-    startDate: "Oct 01, 2023",
-    endDate: "Nov 01, 2023",
+    startDate: "01-10-2023",
+    endDate: "01-11-2023",
     couponCode: null,
+    device_type: "ios",
   },
 
   // Tom Holland - Multiple subscriptions
@@ -677,9 +707,10 @@ const SUBSCRIPTIONS = [
     userName: "Tom Holland",
     plan: "Monthly",
     status: "Active",
-    startDate: "Feb 20, 2024",
-    endDate: "Mar 20, 2024",
+    startDate: "20-02-2024",
+    endDate: "20-03-2024",
     couponCode: "WELCOME20",
+    device_type: "android",
   },
   {
     id: 25,
@@ -687,9 +718,10 @@ const SUBSCRIPTIONS = [
     userName: "Tom Holland",
     plan: "Monthly",
     status: "Expired",
-    startDate: "Jan 20, 2024",
-    endDate: "Feb 20, 2024",
+    startDate: "20-01-2024",
+    endDate: "20-02-2024",
     couponCode: null,
+    device_type: "android",
   },
 
   // Zendaya Coleman - Multiple subscriptions
@@ -699,9 +731,10 @@ const SUBSCRIPTIONS = [
     userName: "Zendaya Coleman",
     plan: "Yearly",
     status: "Active",
-    startDate: "Nov 15, 2023",
-    endDate: "Nov 15, 2024",
+    startDate: "15-11-2023",
+    endDate: "15-11-2024",
     couponCode: null,
+    device_type: "ios",
   },
   {
     id: 26,
@@ -709,9 +742,10 @@ const SUBSCRIPTIONS = [
     userName: "Zendaya Coleman",
     plan: "Yearly",
     status: "Expired",
-    startDate: "Nov 15, 2022",
-    endDate: "Nov 15, 2023",
+    startDate: "15-11-2022",
+    endDate: "15-11-2023",
     couponCode: "ELITE100",
+    device_type: "ios",
   },
   {
     id: 27,
@@ -719,9 +753,10 @@ const SUBSCRIPTIONS = [
     userName: "Zendaya Coleman",
     plan: "Monthly",
     status: "Expired",
-    startDate: "Oct 15, 2022",
-    endDate: "Nov 15, 2022",
+    startDate: "15-10-2022",
+    endDate: "15-11-2022",
     couponCode: null,
+    device_type: "ios",
   },
 ];
 
@@ -758,112 +793,110 @@ const DashboardView: React.FC<{
 }> = ({ couponsCount }) => {
   const navigate = useNavigate();
   return (
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-8">
-    {/* Stats Grid */}
-    <section>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-        {STATS.map((stat, i) => {
-          const displayValue = stat.label === "Coupon Codes" ? couponsCount.toString() : stat.value;
-          return (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className={cn(
-                "glass-card p-6 hover:scale-[1.02] transition-transform cursor-pointer group relative overflow-hidden",
-                stat.glow,
-              )}
-            >
-              <div className="flex justify-between items-start relative z-10">
-                <div>
-                  <p className="text-gray-400 text-sm font-medium">{stat.label}</p>
-                  <h3 className="text-3xl font-bold text-white mt-1 tracking-tight">{displayValue}</h3>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-8">
+      {/* Stats Grid */}
+      <section>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          {STATS.map((stat, i) => {
+            const displayValue = stat.label === "Coupon Codes" ? couponsCount.toString() : stat.value;
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className={cn(
+                  "glass-card p-6 hover:scale-[1.02] transition-transform cursor-pointer group relative overflow-hidden",
+                  stat.glow,
+                )}
+              >
+                <div className="flex justify-between items-start relative z-10">
+                  <div>
+                    <p className="text-gray-400 text-sm font-medium">{stat.label}</p>
+                    <h3 className="text-3xl font-bold text-white mt-1 tracking-tight">{displayValue}</h3>
+                  </div>
+                  <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center", stat.bg, stat.color)}>
+                    <stat.icon className="w-6 h-6" />
+                  </div>
                 </div>
-                <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center", stat.bg, stat.color)}>
-                  <stat.icon className="w-6 h-6" />
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-    </section>
-
-    {/* Main Content Grid */}
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      {/* Recent Users Section */}
-      <section className="lg:col-span-3 space-y-4">
-        <div className="flex items-center justify-between">
-          <h2
-            className="text-xl font-bold text-white tracking-tight cursor-pointer hover:text-indigo-400 transition-colors"
-            onClick={() => navigate('/users')}
-          >
-            Recent Users
-          </h2>
-          <button
-            onClick={() => navigate('/users')}
-            className="text-indigo-400 hover:text-indigo-300 text-sm font-bold flex items-center gap-1 transition-colors"
-          >
-            View all <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div className="glass-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-white/5 text-gray-500 text-[10px] uppercase tracking-widest font-black">
-                  <th className="px-6 py-4">User</th>
-                  <th className="px-6 py-4">Challenge</th>
-                  <th className="px-6 py-4">Progress</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {USERS.map((user) => (
-                  <tr
-                    key={user.id}
-                    className="hover:bg-white/[0.02] transition-colors group cursor-pointer"
-                    onClick={() => navigate(`/users/${user.id}`)}
-                  >
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="size-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 font-bold border border-indigo-500/20">
-                          {user.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </div>
-                        <div>
-                          <div className="font-bold text-white text-sm">{user.name}</div>
-                          <div className="text-xs text-gray-500">{user.email}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm font-bold text-gray-300">{user.challenge}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col gap-1.5 min-w-[120px]">
-                        <div className="flex justify-between text-[10px] font-bold uppercase tracking-wider">
-                          <span className="text-gray-500">Day {user.day}</span>
-                          <span className="text-indigo-400">{user.progress}%</span>
-                        </div>
-                        <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                          <div
-                            className="bg-indigo-500 h-full rounded-full shadow-[0_0_8px_rgba(99,102,241,0.4)]"
-                            style={{ width: `${user.progress}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              </motion.div>
+            );
+          })}
         </div>
       </section>
-    </div>
-  </motion.div>
+
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Recent Users Section */}
+        <section className="lg:col-span-3 space-y-4">
+          <div className="flex items-center justify-between">
+            <h2
+              className="text-xl font-bold text-white tracking-tight cursor-pointer hover:text-indigo-400 transition-colors"
+              onClick={() => navigate("/users")}
+            >
+              Recent Users
+            </h2>
+            <button
+              onClick={() => navigate("/users")}
+              className="text-indigo-400 hover:text-indigo-300 text-sm font-bold flex items-center gap-1 transition-colors"
+            >
+              View all <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="glass-card overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-white/5 text-gray-500 text-[10px] uppercase tracking-widest font-black">
+                    <th className="px-6 py-4">User</th>
+                    <th className="px-6 py-4">Progress</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {USERS.map((user) => (
+                    <tr
+                      key={user.id}
+                      className="hover:bg-white/[0.02] transition-colors group cursor-pointer"
+                      onClick={() => navigate(`/users/${user.id}`)}
+                    >
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="size-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 font-bold border border-indigo-500/20">
+                            {user.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")}
+                          </div>
+                          <div>
+                            <div className="font-bold text-white text-sm">{user.name}</div>
+                            <div className="text-xs text-gray-500">{user.email}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col gap-1.5 min-w-[120px]">
+                          <div className="flex justify-between text-[10px] font-bold uppercase tracking-wider">
+                            <span className="text-gray-500">Day {user.day}</span>
+                            <span className="text-indigo-400">{user.progress}%</span>
+                          </div>
+                          <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                            <div
+                              className="bg-indigo-500 h-full rounded-full shadow-[0_0_8px_rgba(99,102,241,0.4)]"
+                              style={{ width: `${user.progress}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </motion.div>
   );
 };
 
@@ -937,10 +970,13 @@ const CouponModal: React.FC<{
     type: "percentage",
     status: "active",
     usageLimit: "",
+    startDate: "",
     expiryDate: "",
+    deviceTypes: [] as string[],
     description: "",
   });
-
+  const [deviceDropdownOpen, setDeviceDropdownOpen] = useState(false);
+  const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
   React.useEffect(() => {
     if (coupon) {
       setFormData({
@@ -949,7 +985,9 @@ const CouponModal: React.FC<{
         type: coupon.type,
         status: coupon.status,
         usageLimit: coupon.usageLimit.toString(),
-        expiryDate: coupon.expiryDate,
+        startDate: toInputDate(coupon.startDate || ""),
+        expiryDate: toInputDate(coupon.expiryDate),
+        deviceTypes: coupon.deviceTypes || [],
         description: coupon.description,
       });
     } else {
@@ -959,7 +997,9 @@ const CouponModal: React.FC<{
         type: "percentage",
         status: "active",
         usageLimit: "",
+        startDate: "",
         expiryDate: "",
+        deviceTypes: [],
         description: "",
       });
     }
@@ -968,7 +1008,14 @@ const CouponModal: React.FC<{
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.code || !formData.discount || !formData.usageLimit || !formData.expiryDate) {
+    if (
+      !formData.code ||
+      !formData.discount ||
+      !formData.usageLimit ||
+      !formData.startDate ||
+      !formData.expiryDate ||
+      !formData.deviceTypes.length
+    ) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -979,7 +1026,9 @@ const CouponModal: React.FC<{
       type: formData.type,
       status: formData.status,
       usageLimit: parseInt(formData.usageLimit),
-      expiryDate: formData.expiryDate,
+      startDate: fromInputDate(formData.startDate),
+      expiryDate: fromInputDate(formData.expiryDate),
+      deviceTypes: formData.deviceTypes,
       description: formData.description,
     });
   };
@@ -1028,58 +1077,84 @@ const CouponModal: React.FC<{
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Discount Type *</label>
-                  <select
-                    value={formData.type}
-                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:ring-2 focus:ring-electric-blue/30 outline-none cursor-pointer"
-                  >
-                    <option value="percentage" className="bg-dark-900">
-                      Percentage (%)
-                    </option>
-                    <option value="fixed" className="bg-dark-900">
-                      Fixed Amount ($)
-                    </option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
                   <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                    Discount Value * {formData.type === "percentage" ? "(%)" : "($)"}
+                    Discount Value * (%)
                   </label>
                   <input
                     type="number"
                     value={formData.discount}
                     onChange={(e) => setFormData({ ...formData, discount: e.target.value })}
-                    placeholder={formData.type === "percentage" ? "20" : "50"}
+                    placeholder="20"
                     min="0"
-                    max={formData.type === "percentage" ? "100" : undefined}
+                    max="100"
                     step="0.01"
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:ring-2 focus:ring-electric-blue/30 outline-none"
                     required
                   />
                 </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Status *</label>
-                  <select
-                    value={formData.status}
-                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:ring-2 focus:ring-electric-blue/30 outline-none cursor-pointer"
-                  >
-                    <option value="active" className="bg-dark-900">
-                      Active
-                    </option>
-                    <option value="inactive" className="bg-dark-900">
-                      Inactive
-                    </option>
-                  </select>
-                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Status *</label>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setStatusDropdownOpen(!statusDropdownOpen)}
+                      className={cn(
+                        "w-full flex items-center justify-between bg-white/5 border rounded-xl px-4 py-2.5 text-sm outline-none transition-all",
+                        statusDropdownOpen ? "border-electric-blue/50 ring-2 ring-electric-blue/20" : "border-white/10 hover:border-white/20",
+                      )}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className={cn(
+                          "size-2 rounded-full",
+                          formData.status === "active" ? "bg-green-400" : "bg-gray-400"
+                        )} />
+                        <span className={cn(
+                          "text-sm font-medium",
+                          formData.status === "active" ? "text-green-400" : "text-gray-400"
+                        )}>
+                          {formData.status === "active" ? "Active" : "Inactive"}
+                        </span>
+                      </div>
+                      <ChevronDown className={cn("w-4 h-4 text-gray-400 transition-transform shrink-0", statusDropdownOpen && "rotate-180")} />
+                    </button>
+                    <AnimatePresence>
+                      {statusDropdownOpen && (
+                        <>
+                          <div className="fixed inset-0 z-10" onClick={() => setStatusDropdownOpen(false)} />
+                          <motion.div
+                            initial={{ opacity: 0, y: -6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -6 }}
+                            transition={{ duration: 0.15 }}
+                            className="absolute top-full left-0 mt-2 w-full bg-[#16191f] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-20"
+                          >
+                            {[
+                              { value: "active", label: "Active", dot: "bg-green-400", text: "text-green-400" },
+                              { value: "inactive", label: "Inactive", dot: "bg-gray-400", text: "text-gray-400" },
+                            ].map((opt) => (
+                              <button
+                                key={opt.value}
+                                type="button"
+                                onClick={() => { setFormData({ ...formData, status: opt.value }); setStatusDropdownOpen(false); }}
+                                className={cn("w-full flex items-center justify-between px-4 py-2.5 transition-colors text-left", formData.status === opt.value ? "bg-white/[0.04]" : "hover:bg-white/[0.03]")}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <span className={cn("size-2 rounded-full", opt.dot)} />
+                                  <span className={cn("text-sm font-medium", opt.text)}>{opt.label}</span>
+                                </div>
+                                {formData.status === opt.value && <Check className="w-4 h-4 text-electric-blue" />}
+                              </button>
+                            ))}
+                          </motion.div>
+                        </>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Usage Limit *</label>
                   <input
@@ -1092,6 +1167,19 @@ const CouponModal: React.FC<{
                     required
                   />
                 </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Start Date *</label>
+                  <input
+                    type="date"
+                    value={formData.startDate}
+                    onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:ring-2 focus:ring-electric-blue/30 outline-none"
+                    required
+                  />
+                </div>
 
                 <div className="space-y-2">
                   <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Expiry Date *</label>
@@ -1099,10 +1187,88 @@ const CouponModal: React.FC<{
                     type="date"
                     value={formData.expiryDate}
                     onChange={(e) => setFormData({ ...formData, expiryDate: e.target.value })}
+                    min={formData.startDate || undefined}
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:ring-2 focus:ring-electric-blue/30 outline-none"
                     required
                   />
                 </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Device Type *</label>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setDeviceDropdownOpen(!deviceDropdownOpen)}
+                    className={cn(
+                      "w-full flex items-center justify-between bg-white/5 border rounded-xl px-4 py-2.5 text-sm outline-none transition-all",
+                      deviceDropdownOpen ? "border-electric-blue/50 ring-2 ring-electric-blue/20" : "border-white/10 hover:border-white/20",
+                    )}
+                  >
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      {formData.deviceTypes.length === 0 ? (
+                        <span className="text-gray-500">Select device type</span>
+                      ) : (
+                        <div className="flex items-center gap-1.5">
+                          {formData.deviceTypes.map((d: string) => (
+                            <span key={d} className={cn(
+                              "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider border",
+                              d === "ios" ? "bg-electric-blue/15 text-electric-blue border-electric-blue/30" : "bg-green-500/15 text-green-400 border-green-500/30",
+                            )}>
+                              {d === "ios" ? "iOS" : "Android"}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <ChevronDown className={cn("w-4 h-4 text-gray-400 transition-transform shrink-0 ml-2", deviceDropdownOpen && "rotate-180")} />
+                  </button>
+
+                  <AnimatePresence>
+                    {deviceDropdownOpen && (
+                      <>
+                        <div className="fixed inset-0 z-10" onClick={() => setDeviceDropdownOpen(false)} />
+                        <motion.div
+                          initial={{ opacity: 0, y: -6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -6 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute top-full left-0 mt-2 w-full bg-[#16191f] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-20"
+                        >
+                          <div className="px-4 py-2.5 border-b border-white/5 flex items-center justify-between">
+                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Select Platforms</span>
+                            {formData.deviceTypes.length > 0 && (
+                              <button type="button" onClick={() => setFormData({ ...formData, deviceTypes: [] })} className="text-[10px] text-gray-500 hover:text-red-400 transition-colors font-bold">Clear</button>
+                            )}
+                          </div>
+                          {["ios", "android"].map((value) => {
+                            const selected = formData.deviceTypes.includes(value);
+                            const label = value === "ios" ? "iOS" : "Android";
+                            return (
+                              <button
+                                key={value}
+                                type="button"
+                                onClick={() => setFormData({ ...formData, deviceTypes: selected ? formData.deviceTypes.filter((d: string) => d !== value) : [...formData.deviceTypes, value] })}
+                                className={cn("w-full flex items-center justify-between px-4 py-2.5 transition-colors text-left", selected ? "bg-white/[0.04]" : "hover:bg-white/[0.03]")}
+                              >
+                                <span className={cn("text-sm font-medium", selected ? "text-white" : "text-gray-400")}>{label}</span>
+                                {selected && <Check className="w-4 h-4 text-electric-blue" />}
+                              </button>
+                            );
+                          })}
+                          <div className="px-4 py-2.5 border-t border-white/5 bg-white/[0.02] flex items-center justify-between">
+                            <span className="text-[10px] text-gray-500">{formData.deviceTypes.length === 0 ? "No platform selected" : `${formData.deviceTypes.length} platform${formData.deviceTypes.length > 1 ? "s" : ""} selected`}</span>
+                            {formData.deviceTypes.length > 0 && (
+                              <button type="button" onClick={() => setDeviceDropdownOpen(false)} className="text-[10px] font-bold text-electric-blue hover:opacity-80 transition-opacity">Done ✓</button>
+                            )}
+                          </div>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
               </div>
 
               <div className="space-y-2">
@@ -1222,7 +1388,7 @@ const UsersView: React.FC = () => {
             <div>
               <p className="text-gray-400 text-sm font-medium">Monthly Users</p>
               <h3 className="text-3xl font-bold text-white mt-1 tracking-tight">
-                {USERS.filter(u => u.plan === 'Monthly').length}
+                {USERS.filter((u) => u.plan === "Monthly").length}
               </h3>
             </div>
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-green-500/10 text-green-400 border border-green-500/20">
@@ -1241,7 +1407,7 @@ const UsersView: React.FC = () => {
             <div>
               <p className="text-gray-400 text-sm font-medium">Yearly Users</p>
               <h3 className="text-3xl font-bold text-white mt-1 tracking-tight">
-                {USERS.filter(u => u.plan === 'Yearly').length}
+                {USERS.filter((u) => u.plan === "Yearly").length}
               </h3>
             </div>
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-electric-purple/10 text-electric-purple border border-electric-purple/20">
@@ -1273,19 +1439,14 @@ const UsersView: React.FC = () => {
               className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm font-medium text-gray-300 hover:border-electric-blue transition-colors min-w-[140px]"
             >
               <CreditCard className="w-4 h-4" />
-              <span className="flex-1 text-left">
-                {planFilter === "All" ? "Plan: All" : planFilter}
-              </span>
+              <span className="flex-1 text-left">{planFilter === "All" ? "Plan: All" : planFilter}</span>
               <ChevronDown className={cn("w-4 h-4 transition-transform", isPlanDropdownOpen && "rotate-180")} />
             </button>
 
             <AnimatePresence>
               {isPlanDropdownOpen && (
                 <>
-                  <div 
-                    className="fixed inset-0 z-10" 
-                    onClick={() => setIsPlanDropdownOpen(false)}
-                  />
+                  <div className="fixed inset-0 z-10" onClick={() => setIsPlanDropdownOpen(false)} />
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -1308,14 +1469,12 @@ const UsersView: React.FC = () => {
                           "w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors text-left",
                           planFilter === option.value
                             ? "bg-electric-blue/10 text-white"
-                            : "text-gray-400 hover:bg-white/5 hover:text-white"
+                            : "text-gray-400 hover:bg-white/5 hover:text-white",
                         )}
                       >
                         <option.icon className={cn("w-4 h-4", option.color || "text-gray-500")} />
                         <span className="flex-1">{option.label}</span>
-                        {planFilter === option.value && (
-                          <Check className="w-4 h-4 text-electric-blue" />
-                        )}
+                        {planFilter === option.value && <Check className="w-4 h-4 text-electric-blue" />}
                       </button>
                     ))}
                   </motion.div>
@@ -1390,8 +1549,8 @@ const UsersView: React.FC = () => {
                       )}
                     </td>
                     <td className="px-6 py-4 text-center text-sm text-gray-400">
-                      <div className="font-medium text-gray-200">{user.startDate.split(",")[0]}</div>
-                      <div className="text-[10px] text-gray-500">to {user.endDate.split(",")[0]}</div>
+                      <div className="font-medium text-gray-200">{formatDate(user.startDate)}</div>
+                      <div className="text-[10px] text-gray-500">to {formatDate(user.endDate)}</div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
@@ -1475,8 +1634,8 @@ const UsersView: React.FC = () => {
 const UserDetailView: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const userId = parseInt(location.pathname.split('/').pop() || '0');
-  const user = USERS.find(u => u.id === userId);
+  const userId = parseInt(location.pathname.split("/").pop() || "0");
+  const user = USERS.find((u) => u.id === userId);
 
   if (!user) {
     return (
@@ -1484,7 +1643,7 @@ const UserDetailView: React.FC = () => {
         <div className="text-center">
           <p className="text-gray-500 font-medium">User not found</p>
           <button
-            onClick={() => navigate('/users')}
+            onClick={() => navigate("/users")}
             className="mt-4 px-4 py-2 bg-electric-blue text-dark-900 rounded-xl font-bold hover:opacity-90 transition-all"
           >
             Back to Users
@@ -1496,6 +1655,7 @@ const UserDetailView: React.FC = () => {
 
   // Get all subscriptions for this user
   const userSubscriptions = SUBSCRIPTIONS.filter((sub) => sub.userId === user.id);
+  const activeSubscription = userSubscriptions.find((sub) => sub.status === "Active") || userSubscriptions[0];
 
   return (
     <motion.div
@@ -1507,7 +1667,7 @@ const UserDetailView: React.FC = () => {
       {/* Header with Back Button */}
       <div className="flex items-center justify-between">
         <button
-          onClick={() => navigate('/users')}
+          onClick={() => navigate("/users")}
           className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
         >
           <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -1571,13 +1731,28 @@ const UserDetailView: React.FC = () => {
                   <span className="text-sm text-gray-500">Not Used</span>
                 )}
               </div>
+              {user.couponUsed && activeSubscription && (
+                <div className="flex justify-between items-center py-3 border-b border-white/5">
+                  <span className="text-sm text-gray-400">Device Type</span>
+                  <span
+                    className={cn(
+                      "inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold  tracking-widest border",
+                      activeSubscription.device_type === "ios"
+                        ? "bg-electric-blue/10 text-electric-blue border-electric-blue/20"
+                        : "bg-green-500/10 text-green-400 border-green-500/20",
+                    )}
+                  >
+                    {activeSubscription.device_type === "ios" ? "iOS" : "Android"}
+                  </span>
+                </div>
+              )}
               <div className="flex justify-between items-center py-3 border-b border-white/5">
                 <span className="text-sm text-gray-400">Start Date</span>
-                <span className="text-sm font-bold text-white">{user.startDate}</span>
+                <span className="text-sm font-bold text-white">{formatDate(user.startDate)}</span>
               </div>
               <div className="flex justify-between items-center py-3">
                 <span className="text-sm text-gray-400">End Date</span>
-                <span className="text-sm font-bold text-white">{user.endDate}</span>
+                <span className="text-sm font-bold text-white">{formatDate(user.endDate)}</span>
               </div>
             </div>
           </div>
@@ -1656,7 +1831,7 @@ const UserDetailView: React.FC = () => {
                   <span>Start Date</span>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm">
-                  {user.startDate}
+                  {formatDate(user.startDate)}
                 </div>
               </div>
             </div>
@@ -1684,6 +1859,7 @@ const UserDetailView: React.FC = () => {
                       <th className="px-4 py-3">Start Date</th>
                       <th className="px-4 py-3">End Date</th>
                       <th className="px-4 py-3">Coupon</th>
+                      <th className="px-4 py-3">Device Type</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5">
@@ -1713,8 +1889,8 @@ const UserDetailView: React.FC = () => {
                             {sub.status}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-xs text-gray-300 font-medium">{sub.startDate}</td>
-                        <td className="px-4 py-3 text-xs text-gray-300 font-medium">{sub.endDate}</td>
+                        <td className="px-4 py-3 text-xs text-gray-300 font-medium">{formatDate(sub.startDate)}</td>
+                        <td className="px-4 py-3 text-xs text-gray-300 font-medium">{formatDate(sub.endDate)}</td>
                         <td className="px-4 py-3">
                           {sub.couponCode ? (
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-electric-purple/10 text-electric-purple border border-electric-purple/20">
@@ -1723,6 +1899,22 @@ const UserDetailView: React.FC = () => {
                             </span>
                           ) : (
                             <span className="text-[10px] text-gray-500 font-medium">None</span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3">
+                          {sub.couponCode ? (
+                            <span
+                              className={cn(
+                                "inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold  tracking-widest border",
+                                sub.device_type === "ios"
+                                  ? "bg-electric-blue/10 text-electric-blue border-electric-blue/20"
+                                  : "bg-green-500/10 text-green-400 border-green-500/20",
+                              )}
+                            >
+                              {sub.device_type === "ios" ? "iOS" : "Android"}
+                            </span>
+                          ) : (
+                            <span className="text-[10px] text-gray-500 font-medium">-</span>
                           )}
                         </td>
                       </tr>
@@ -1766,10 +1958,7 @@ const CouponsView = () => {
 
   // Pagination logic
   const totalPages = Math.ceil(filteredCoupons.length / itemsPerPage);
-  const paginatedCoupons = filteredCoupons.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const paginatedCoupons = filteredCoupons.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   // Reset to page 1 when filters change
   React.useEffect(() => {
@@ -1929,7 +2118,7 @@ const CouponsView = () => {
             className="bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm text-white focus:ring-2 focus:ring-electric-blue/30 outline-none transition-all w-64"
           />
         </div>
-        
+
         {/* Custom Status Dropdown */}
         <div className="relative">
           <button
@@ -1946,10 +2135,7 @@ const CouponsView = () => {
           <AnimatePresence>
             {isStatusDropdownOpen && (
               <>
-                <div 
-                  className="fixed inset-0 z-10" 
-                  onClick={() => setIsStatusDropdownOpen(false)}
-                />
+                <div className="fixed inset-0 z-10" onClick={() => setIsStatusDropdownOpen(false)} />
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -1973,14 +2159,12 @@ const CouponsView = () => {
                         "w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors text-left",
                         statusFilter === option.value
                           ? "bg-electric-blue/10 text-white"
-                          : "text-gray-400 hover:bg-white/5 hover:text-white"
+                          : "text-gray-400 hover:bg-white/5 hover:text-white",
                       )}
                     >
                       <option.icon className={cn("w-4 h-4", option.color || "text-gray-500")} />
                       <span className="flex-1">{option.label}</span>
-                      {statusFilter === option.value && (
-                        <Check className="w-4 h-4 text-electric-blue" />
-                      )}
+                      {statusFilter === option.value && <Check className="w-4 h-4 text-electric-blue" />}
                     </button>
                   ))}
                 </motion.div>
@@ -1996,11 +2180,13 @@ const CouponsView = () => {
             <thead>
               <tr className="bg-white/5 text-gray-400 text-xs uppercase tracking-wider font-bold">
                 <th className="px-6 py-4">Coupon Code</th>
-                <th className="px-6 py-4">Description</th>
+                <th className="px-6 py-4">Device Type</th>
                 <th className="px-6 py-4">Discount</th>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4">Usage</th>
+                <th className="px-6 py-4">Start Date</th>
                 <th className="px-6 py-4">Expiry Date</th>
+                <th className="px-6 py-4">Description</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
@@ -2024,11 +2210,29 @@ const CouponsView = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-sm text-gray-400">{coupon.description}</span>
+                      {coupon.deviceTypes && coupon.deviceTypes.length > 0 ? (
+                        <div className="flex flex-wrap gap-1">
+                          {coupon.deviceTypes.map((dt: string) => (
+                            <span
+                              key={dt}
+                              className={cn(
+                                "inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold  tracking-widest border",
+                                dt === "ios"
+                                  ? "bg-electric-blue/10 text-electric-blue border-electric-blue/20"
+                                  : "bg-green-500/10 text-green-400 border-green-500/20",
+                              )}
+                            >
+                              {dt === "ios" ? "iOS" : "Android"}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-xs text-gray-500 font-medium">—</span>
+                      )}
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-sm font-bold text-electric-blue">
-                        {coupon.type === "percentage" ? `${coupon.discount}%` : `$${coupon.discount}`}
+                        {coupon.type === "percentage" ? `${coupon.discount}%` : `${coupon.discount}%`}
                       </span>
                     </td>
                     <td className="px-6 py-4">
@@ -2063,8 +2267,17 @@ const CouponsView = () => {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2 text-sm text-gray-300">
                         <Calendar className="w-4 h-4 text-gray-500" />
-                        <span className="font-medium">{coupon.expiryDate}</span>
+                        <span className="font-medium">{coupon.startDate ? formatDate(coupon.startDate) : "—"}</span>
                       </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2 text-sm text-gray-300">
+                        <Calendar className="w-4 h-4 text-gray-500" />
+                        <span className="font-medium">{formatDate(coupon.expiryDate)}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-sm text-gray-400">{coupon.description}</span>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
@@ -2086,7 +2299,7 @@ const CouponsView = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center">
+                  <td colSpan={9} className="px-6 py-12 text-center">
                     <Tag className="w-12 h-12 text-gray-600 mx-auto mb-4" />
                     <p className="text-gray-500 font-medium">No coupons found</p>
                   </td>
@@ -2155,8 +2368,8 @@ const SubscriptionsView = () => {
   });
 
   // Calculate counts based on current filters (search + plan)
-  const activeCount = baseFilteredSubscriptions.filter(sub => sub.status === 'Active').length;
-  const expiredCount = baseFilteredSubscriptions.filter(sub => sub.status === 'Expired').length;
+  const activeCount = baseFilteredSubscriptions.filter((sub) => sub.status === "Active").length;
+  const expiredCount = baseFilteredSubscriptions.filter((sub) => sub.status === "Expired").length;
 
   // Apply all filters including status for the table
   const filteredSubscriptions = baseFilteredSubscriptions.filter((sub) => {
@@ -2188,58 +2401,10 @@ const SubscriptionsView = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0 }}
-          onClick={() => handleStatusBoxClick('Active')}
-          className={cn(
-            "glass-card p-6 hover:scale-[1.02] transition-all cursor-pointer group relative overflow-hidden",
-            statusFilter === 'Active' ? "ring-2 ring-green-500/50 bg-green-500/5" : ""
-          )}
-        >
-          <div className="flex justify-between items-start relative z-10">
-            <div>
-              <p className="text-gray-400 text-sm font-medium">Active Subscriptions</p>
-              <h3 className="text-3xl font-bold text-white mt-1 tracking-tight">{activeCount}</h3>
-              {statusFilter === 'Active' && (
-                <p className="text-green-400 text-xs font-bold mt-2 uppercase tracking-wider">Filtered</p>
-              )}
-            </div>
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-green-500/10 text-green-400 border border-green-500/20">
-              <CheckCircle className="w-6 h-6" />
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          onClick={() => handleStatusBoxClick('Expired')}
-          className={cn(
-            "glass-card p-6 hover:scale-[1.02] transition-all cursor-pointer group relative overflow-hidden",
-            statusFilter === 'Expired' ? "ring-2 ring-red-500/50 bg-red-500/5" : ""
-          )}
-        >
-          <div className="flex justify-between items-start relative z-10">
-            <div>
-              <p className="text-gray-400 text-sm font-medium">Expired Subscriptions</p>
-              <h3 className="text-3xl font-bold text-white mt-1 tracking-tight">{expiredCount}</h3>
-              {statusFilter === 'Expired' && (
-                <p className="text-red-400 text-xs font-bold mt-2 uppercase tracking-wider">Filtered</p>
-              )}
-            </div>
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-red-500/10 text-red-400 border border-red-500/20">
-              <AlertCircle className="w-6 h-6" />
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
           className="glass-card p-6 hover:scale-[1.02] transition-transform cursor-pointer group relative overflow-hidden"
         >
           <div className="flex justify-between items-start relative z-10">
@@ -2249,6 +2414,54 @@ const SubscriptionsView = () => {
             </div>
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-electric-blue/10 text-electric-blue border border-electric-blue/20">
               <Receipt className="w-6 h-6" />
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          onClick={() => handleStatusBoxClick("Active")}
+          className={cn(
+            "glass-card p-6 hover:scale-[1.02] transition-all cursor-pointer group relative overflow-hidden",
+            statusFilter === "Active" ? "ring-2 ring-green-500/50 bg-green-500/5" : "",
+          )}
+        >
+          <div className="flex justify-between items-start relative z-10">
+            <div>
+              <p className="text-gray-400 text-sm font-medium">Active Subscriptions</p>
+              <h3 className="text-3xl font-bold text-white mt-1 tracking-tight">{activeCount}</h3>
+              {statusFilter === "Active" && (
+                <p className="text-green-400 text-xs font-bold mt-2 uppercase tracking-wider">Filtered</p>
+              )}
+            </div>
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-green-500/10 text-green-400 border border-green-500/20">
+              <CheckCircle className="w-6 h-6" />
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          onClick={() => handleStatusBoxClick("Expired")}
+          className={cn(
+            "glass-card p-6 hover:scale-[1.02] transition-all cursor-pointer group relative overflow-hidden",
+            statusFilter === "Expired" ? "ring-2 ring-red-500/50 bg-red-500/5" : "",
+          )}
+        >
+          <div className="flex justify-between items-start relative z-10">
+            <div>
+              <p className="text-gray-400 text-sm font-medium">Expired Subscriptions</p>
+              <h3 className="text-3xl font-bold text-white mt-1 tracking-tight">{expiredCount}</h3>
+              {statusFilter === "Expired" && (
+                <p className="text-red-400 text-xs font-bold mt-2 uppercase tracking-wider">Filtered</p>
+              )}
+            </div>
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-red-500/10 text-red-400 border border-red-500/20">
+              <AlertCircle className="w-6 h-6" />
             </div>
           </div>
         </motion.div>
@@ -2265,7 +2478,7 @@ const SubscriptionsView = () => {
             className="bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm text-white focus:ring-2 focus:ring-electric-blue/30 outline-none transition-all w-64"
           />
         </div>
-        
+
         {/* Custom Status Dropdown */}
         <div className="relative">
           <button
@@ -2276,19 +2489,14 @@ const SubscriptionsView = () => {
             className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm font-medium text-gray-300 hover:border-electric-blue transition-colors min-w-[140px]"
           >
             <Filter className="w-4 h-4" />
-            <span className="flex-1 text-left">
-              {statusFilter === "All" ? "Status: All" : statusFilter}
-            </span>
+            <span className="flex-1 text-left">{statusFilter === "All" ? "Status: All" : statusFilter}</span>
             <ChevronDown className={cn("w-4 h-4 transition-transform", isStatusDropdownOpen && "rotate-180")} />
           </button>
 
           <AnimatePresence>
             {isStatusDropdownOpen && (
               <>
-                <div 
-                  className="fixed inset-0 z-10" 
-                  onClick={() => setIsStatusDropdownOpen(false)}
-                />
+                <div className="fixed inset-0 z-10" onClick={() => setIsStatusDropdownOpen(false)} />
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -2311,14 +2519,12 @@ const SubscriptionsView = () => {
                         "w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors text-left",
                         statusFilter === option.value
                           ? "bg-electric-blue/10 text-white"
-                          : "text-gray-400 hover:bg-white/5 hover:text-white"
+                          : "text-gray-400 hover:bg-white/5 hover:text-white",
                       )}
                     >
                       <option.icon className={cn("w-4 h-4", option.color || "text-gray-500")} />
                       <span className="flex-1">{option.label}</span>
-                      {statusFilter === option.value && (
-                        <Check className="w-4 h-4 text-electric-blue" />
-                      )}
+                      {statusFilter === option.value && <Check className="w-4 h-4 text-electric-blue" />}
                     </button>
                   ))}
                 </motion.div>
@@ -2337,19 +2543,14 @@ const SubscriptionsView = () => {
             className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm font-medium text-gray-300 hover:border-electric-blue transition-colors min-w-[140px]"
           >
             <CreditCard className="w-4 h-4" />
-            <span className="flex-1 text-left">
-              {planFilter === "All" ? "Plan: All" : planFilter}
-            </span>
+            <span className="flex-1 text-left">{planFilter === "All" ? "Plan: All" : planFilter}</span>
             <ChevronDown className={cn("w-4 h-4 transition-transform", isPlanDropdownOpen && "rotate-180")} />
           </button>
 
           <AnimatePresence>
             {isPlanDropdownOpen && (
               <>
-                <div 
-                  className="fixed inset-0 z-10" 
-                  onClick={() => setIsPlanDropdownOpen(false)}
-                />
+                <div className="fixed inset-0 z-10" onClick={() => setIsPlanDropdownOpen(false)} />
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -2372,14 +2573,12 @@ const SubscriptionsView = () => {
                         "w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors text-left",
                         planFilter === option.value
                           ? "bg-electric-blue/10 text-white"
-                          : "text-gray-400 hover:bg-white/5 hover:text-white"
+                          : "text-gray-400 hover:bg-white/5 hover:text-white",
                       )}
                     >
                       <option.icon className={cn("w-4 h-4", option.color || "text-gray-500")} />
                       <span className="flex-1">{option.label}</span>
-                      {planFilter === option.value && (
-                        <Check className="w-4 h-4 text-electric-blue" />
-                      )}
+                      {planFilter === option.value && <Check className="w-4 h-4 text-electric-blue" />}
                     </button>
                   ))}
                 </motion.div>
@@ -2388,11 +2587,11 @@ const SubscriptionsView = () => {
           </AnimatePresence>
         </div>
 
-        {(statusFilter !== 'All' || planFilter !== 'All') && (
+        {(statusFilter !== "All" || planFilter !== "All") && (
           <button
             onClick={() => {
-              setStatusFilter('All');
-              setPlanFilter('All');
+              setStatusFilter("All");
+              setPlanFilter("All");
             }}
             className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs font-bold text-gray-400 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2"
           >
@@ -2413,6 +2612,7 @@ const SubscriptionsView = () => {
                 <th className="px-6 py-4">Start Date</th>
                 <th className="px-6 py-4">End Date</th>
                 <th className="px-6 py-4">Coupon Code</th>
+                <th className="px-6 py-4">Device Type</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
@@ -2454,8 +2654,8 @@ const SubscriptionsView = () => {
                         {sub.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-300 font-medium">{sub.startDate}</td>
-                    <td className="px-6 py-4 text-sm text-gray-300 font-medium">{sub.endDate}</td>
+                    <td className="px-6 py-4 text-sm text-gray-300 font-medium">{formatDate(sub.startDate)}</td>
+                    <td className="px-6 py-4 text-sm text-gray-300 font-medium">{formatDate(sub.endDate)}</td>
                     <td className="px-6 py-4">
                       {sub.couponCode ? (
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-electric-purple/10 text-electric-purple border border-electric-purple/20">
@@ -2466,11 +2666,28 @@ const SubscriptionsView = () => {
                         <span className="text-xs text-gray-500 font-medium">Not Used</span>
                       )}
                     </td>
+
+                    <td className="px-6 py-4">
+                      {sub.couponCode ? (
+                        <span
+                          className={cn(
+                            "inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold  tracking-widest border",
+                            sub.device_type === "ios"
+                              ? "bg-electric-blue/10 text-electric-blue border-electric-blue/20"
+                              : "bg-green-500/10 text-green-400 border-green-500/20",
+                          )}
+                        >
+                          {sub.device_type === "ios" ? "iOS" : "Android"}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-gray-500 font-medium">-</span>
+                      )}
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center">
+                  <td colSpan={7} className="px-6 py-12 text-center">
                     <Receipt className="w-12 h-12 text-gray-600 mx-auto mb-4" />
                     <p className="text-gray-500 font-medium">No subscriptions found</p>
                   </td>
@@ -2795,12 +3012,12 @@ function App() {
 
   const handleLogin = (userData: any) => {
     setUser(userData);
-    navigate('/dashboard');
+    navigate("/dashboard");
   };
 
   const handleLogout = () => {
     setUser(null);
-    navigate('/login');
+    navigate("/login");
     toast.success("You have logged out successfully.");
   };
 
@@ -2828,25 +3045,15 @@ function App() {
                     <SidebarItem
                       icon={LayoutDashboard}
                       label="Dashboard"
-                      active={currentPath === '/dashboard' || currentPath === '/'}
+                      active={currentPath === "/dashboard" || currentPath === "/"}
                       to="/dashboard"
                     />
-                    <SidebarItem
-                      icon={Users}
-                      label="Users"
-                      active={currentPath.startsWith('/users')}
-                      to="/users"
-                    />
-                    <SidebarItem
-                      icon={Tag}
-                      label="Coupons"
-                      active={currentPath === '/coupons'}
-                      to="/coupons"
-                    />
+                    <SidebarItem icon={Users} label="Users" active={currentPath.startsWith("/users")} to="/users" />
+                    <SidebarItem icon={Tag} label="Coupons" active={currentPath === "/coupons"} to="/coupons" />
                     <SidebarItem
                       icon={Receipt}
                       label="Subscriptions"
-                      active={currentPath === '/subscriptions'}
+                      active={currentPath === "/subscriptions"}
                       to="/subscriptions"
                     />
                   </nav>
@@ -2879,7 +3086,9 @@ function App() {
                       <div className="flex items-center gap-4">
                         <div className="text-right hidden sm:block">
                           <p className="text-sm font-bold text-white leading-none">{user.name}</p>
-                          <p className="text-[10px] text-gray-500 font-medium mt-1 uppercase tracking-wider">{user.role}</p>
+                          <p className="text-[10px] text-gray-500 font-medium mt-1 uppercase tracking-wider">
+                            {user.role}
+                          </p>
                         </div>
                         <div className="size-10 rounded-full border-2 border-electric-purple p-0.5 flex items-center justify-center">
                           <div className="size-full rounded-full bg-dark-800 flex items-center justify-center text-gray-400">
