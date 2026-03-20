@@ -1,0 +1,62 @@
+import { Users, TrendingUp, Trophy, Zap, Tag } from "lucide-react";
+import type { User, Subscription, Coupon } from "../types";
+
+export const STATS = [
+  { label: "Total Users", value: "2,847", change: "+12.5%", trend: "up", icon: Users, color: "text-electric-blue", bg: "bg-electric-blue/10", glow: "neon-glow-blue" },
+  { label: "Completed Challenges", value: "156", change: "+42%", trend: "up", icon: TrendingUp, color: "text-green-400", bg: "bg-green-500/10", glow: "" },
+  { label: "Active Subscriptions", value: "8", change: "+8.2%", trend: "up", icon: Trophy, color: "text-electric-purple", bg: "bg-electric-purple/10", glow: "neon-glow-purple" },
+  { label: "Expired Subscriptions", value: "19", change: "-2.1%", trend: "down", icon: Zap, color: "text-orange-400", bg: "bg-orange-500/10", glow: "" },
+  { label: "Coupon Codes", value: "0", change: "+0%", trend: "up", icon: Tag, color: "text-pink-400", bg: "bg-pink-500/10", glow: "" },
+];
+
+export const USERS: User[] = [
+  { id: 1, name: "Sarah Chen", email: "sarah@email.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah", plan: "Yearly", challenge: "100 Days of Code", day: 67, progress: 67, status: "Active", streak: 45, joinedDate: "12-10-2023", startDate: "12-10-2023", endDate: "20-01-2024", about: "Passionate developer focusing on high-performance web applications.", couponUsed: "WELCOME20" },
+  { id: 2, name: "Marcus Johnson", email: "marcus@email.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus", plan: "Monthly", challenge: "100 Days of Fitness", day: 34, progress: 34, status: "Active", streak: 32, joinedDate: "15-01-2024", startDate: "15-01-2024", endDate: "25-04-2024", about: "Fitness enthusiast and software engineer.", couponUsed: null },
+  { id: 3, name: "Emily Davis", email: "emily@email.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily", plan: "Monthly", challenge: "100 Days of Reading", day: 89, progress: 89, status: "Active", streak: 89, joinedDate: "05-05-2023", startDate: "05-05-2023", endDate: "13-08-2023", about: "Bookworm exploring new genres.", couponUsed: "SUMMER50" },
+  { id: 4, name: "Alex Rivera", email: "alex@email.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex", plan: "Yearly", challenge: "100 Days of Meditation", day: 12, progress: 12, status: "Paused", streak: 12, joinedDate: "01-01-2024", startDate: "01-01-2024", endDate: "10-04-2024", about: "Mindfulness practitioner.", couponUsed: "ELITE100" },
+  { id: 5, name: "Jordan Lee", email: "jordan@email.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jordan", plan: "Monthly", challenge: "100 Days of Writing", day: 100, progress: 100, status: "Completed", streak: 100, joinedDate: "20-05-2023", startDate: "20-05-2023", endDate: "28-08-2023", about: "Aspiring novelist.", couponUsed: null },
+  { id: 6, name: "Taylor Swift", email: "taylor@email.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Taylor", plan: "Yearly", challenge: "100 Days of Songwriting", day: 13, progress: 13, status: "Active", streak: 13, joinedDate: "01-03-2024", startDate: "01-03-2024", endDate: "09-06-2024", about: "Music lover.", couponUsed: "WELCOME20" },
+  { id: 7, name: "Chris Evans", email: "chris@email.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Chris", plan: "Yearly", challenge: "100 Days of Fitness", day: 45, progress: 45, status: "Expired", streak: 45, joinedDate: "10-02-2024", startDate: "10-02-2024", endDate: "21-05-2024", about: "Staying in shape.", couponUsed: null },
+  { id: 8, name: "Zoe Kravitz", email: "zoe@email.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zoe", plan: "Monthly", challenge: "100 Days of Yoga", day: 100, progress: 100, status: "Completed", streak: 100, joinedDate: "15-06-2023", startDate: "15-06-2023", endDate: "23-09-2023", about: "Finding balance.", couponUsed: "SUMMER50" },
+  { id: 9, name: "Robert Downey", email: "robert@email.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Robert", plan: "Monthly", challenge: "100 Days of Acting", day: 5, progress: 5, status: "Expired", streak: 0, joinedDate: "10-01-2024", startDate: "10-01-2024", endDate: "20-04-2024", about: "Method acting.", couponUsed: "NEWYEAR2024" },
+  { id: 10, name: "Scarlett Johansson", email: "scarlett@email.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Scarlett", plan: "Yearly", challenge: "100 Days of Languages", day: 78, progress: 78, status: "Active", streak: 78, joinedDate: "01-12-2023", startDate: "01-12-2023", endDate: "10-03-2024", about: "Polyglot in training.", couponUsed: null },
+  { id: 11, name: "Tom Holland", email: "tom@email.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Tom", plan: "Monthly", challenge: "100 Days of Gymnastics", day: 22, progress: 22, status: "Active", streak: 22, joinedDate: "20-02-2024", startDate: "20-02-2024", endDate: "31-05-2024", about: "Flipping around.", couponUsed: "WELCOME20" },
+  { id: 12, name: "Zendaya Coleman", email: "zendaya@email.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zendaya", plan: "Yearly", challenge: "100 Days of Dance", day: 95, progress: 95, status: "Active", streak: 95, joinedDate: "15-11-2023", startDate: "15-11-2023", endDate: "23-02-2024", about: "Dancing through life.", couponUsed: null },
+];
+
+export const COUPONS: Coupon[] = [
+  { id: 1, code: "WELCOME20", discount: 20, type: "percentage", status: "active", usageCount: 145, usageLimit: 500, startDate: "01-01-2024", expiryDate: "31-12-2024", description: "Welcome discount for new users", deviceTypes: ["android", "ios"] },
+  { id: 2, code: "SUMMER50", discount: 50, type: "fixed", status: "active", usageCount: 89, usageLimit: 200, startDate: "01-06-2024", expiryDate: "31-08-2024", description: "Summer special offer", deviceTypes: ["android"] },
+  { id: 3, code: "ELITE100", discount: 100, type: "fixed", status: "expired", usageCount: 200, usageLimit: 200, startDate: "01-12-2023", expiryDate: "15-01-2024", description: "Elite plan discount", deviceTypes: ["ios"] },
+  { id: 4, code: "NEWYEAR2024", discount: 30, type: "percentage", status: "inactive", usageCount: 0, usageLimit: 1000, startDate: "01-01-2024", expiryDate: "31-12-2024", description: "New Year promotion", deviceTypes: ["android", "ios"] },
+];
+
+export const SUBSCRIPTIONS: Subscription[] = [
+  { id: 1, userId: 1, userName: "Sarah Chen", plan: "Yearly", status: "Active", startDate: "12-10-2023", endDate: "12-10-2024", couponCode: "WELCOME20", device_type: "ios" },
+  { id: 13, userId: 1, userName: "Sarah Chen", plan: "Monthly", status: "Expired", startDate: "10-07-2023", endDate: "10-08-2023", couponCode: null, device_type: "ios" },
+  { id: 14, userId: 1, userName: "Sarah Chen", plan: "Monthly", status: "Expired", startDate: "10-08-2023", endDate: "10-09-2023", couponCode: null, device_type: "ios" },
+  { id: 2, userId: 2, userName: "Marcus Johnson", plan: "Monthly", status: "Active", startDate: "15-01-2024", endDate: "15-02-2024", couponCode: null, device_type: "android" },
+  { id: 15, userId: 2, userName: "Marcus Johnson", plan: "Monthly", status: "Expired", startDate: "15-12-2023", endDate: "15-01-2024", couponCode: "WELCOME20", device_type: "android" },
+  { id: 3, userId: 3, userName: "Emily Davis", plan: "Monthly", status: "Active", startDate: "05-05-2023", endDate: "05-06-2023", couponCode: "SUMMER50", device_type: "android" },
+  { id: 16, userId: 3, userName: "Emily Davis", plan: "Monthly", status: "Expired", startDate: "05-04-2023", endDate: "05-05-2023", couponCode: null, device_type: "android" },
+  { id: 17, userId: 3, userName: "Emily Davis", plan: "Yearly", status: "Expired", startDate: "05-04-2022", endDate: "05-04-2023", couponCode: "ELITE100", device_type: "android" },
+  { id: 4, userId: 4, userName: "Alex Rivera", plan: "Yearly", status: "Active", startDate: "01-01-2024", endDate: "01-01-2025", couponCode: "ELITE100", device_type: "ios" },
+  { id: 5, userId: 5, userName: "Jordan Lee", plan: "Monthly", status: "Expired", startDate: "20-05-2023", endDate: "20-06-2023", couponCode: null, device_type: "android" },
+  { id: 18, userId: 5, userName: "Jordan Lee", plan: "Monthly", status: "Expired", startDate: "20-04-2023", endDate: "20-05-2023", couponCode: null, device_type: "android" },
+  { id: 19, userId: 5, userName: "Jordan Lee", plan: "Yearly", status: "Expired", startDate: "20-04-2022", endDate: "20-04-2023", couponCode: "WELCOME20", device_type: "android" },
+  { id: 6, userId: 6, userName: "Taylor Swift", plan: "Yearly", status: "Active", startDate: "01-03-2024", endDate: "01-03-2025", couponCode: "WELCOME20", device_type: "ios" },
+  { id: 7, userId: 7, userName: "Chris Evans", plan: "Yearly", status: "Expired", startDate: "10-02-2024", endDate: "10-02-2025", couponCode: null, device_type: "android" },
+  { id: 20, userId: 7, userName: "Chris Evans", plan: "Monthly", status: "Expired", startDate: "10-01-2024", endDate: "10-02-2024", couponCode: "SUMMER50", device_type: "android" },
+  { id: 21, userId: 7, userName: "Chris Evans", plan: "Monthly", status: "Expired", startDate: "10-12-2023", endDate: "10-01-2024", couponCode: null, device_type: "android" },
+  { id: 8, userId: 8, userName: "Zoe Kravitz", plan: "Monthly", status: "Expired", startDate: "15-06-2023", endDate: "15-07-2023", couponCode: "SUMMER50", device_type: "ios" },
+  { id: 22, userId: 8, userName: "Zoe Kravitz", plan: "Yearly", status: "Expired", startDate: "15-06-2022", endDate: "15-06-2023", couponCode: null, device_type: "ios" },
+  { id: 9, userId: 9, userName: "Robert Downey", plan: "Monthly", status: "Expired", startDate: "10-01-2024", endDate: "10-02-2024", couponCode: "NEWYEAR2024", device_type: "android" },
+  { id: 10, userId: 10, userName: "Scarlett Johansson", plan: "Yearly", status: "Active", startDate: "01-12-2023", endDate: "01-12-2024", couponCode: null, device_type: "ios" },
+  { id: 23, userId: 10, userName: "Scarlett Johansson", plan: "Monthly", status: "Expired", startDate: "01-11-2023", endDate: "01-12-2023", couponCode: "WELCOME20", device_type: "ios" },
+  { id: 24, userId: 10, userName: "Scarlett Johansson", plan: "Monthly", status: "Expired", startDate: "01-10-2023", endDate: "01-11-2023", couponCode: null, device_type: "ios" },
+  { id: 11, userId: 11, userName: "Tom Holland", plan: "Monthly", status: "Active", startDate: "20-02-2024", endDate: "20-03-2024", couponCode: "WELCOME20", device_type: "android" },
+  { id: 25, userId: 11, userName: "Tom Holland", plan: "Monthly", status: "Expired", startDate: "20-01-2024", endDate: "20-02-2024", couponCode: null, device_type: "android" },
+  { id: 12, userId: 12, userName: "Zendaya Coleman", plan: "Yearly", status: "Active", startDate: "15-11-2023", endDate: "15-11-2024", couponCode: null, device_type: "ios" },
+  { id: 26, userId: 12, userName: "Zendaya Coleman", plan: "Yearly", status: "Expired", startDate: "15-11-2022", endDate: "15-11-2023", couponCode: "ELITE100", device_type: "ios" },
+  { id: 27, userId: 12, userName: "Zendaya Coleman", plan: "Monthly", status: "Expired", startDate: "15-10-2022", endDate: "15-11-2022", couponCode: null, device_type: "ios" },
+];
