@@ -9,6 +9,7 @@ import { Toaster, toast } from "sonner";
 import { COUPONS } from "./data/mockData";
 import type { AuthUser } from "./types";
 import LoginPage from "./pages/LoginPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import AppLayout from "./components/layout/AppLayout";
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
       <Toaster position="top-right" richColors theme="dark" />
       <Routes>
         <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route
           path="/*"
           element={

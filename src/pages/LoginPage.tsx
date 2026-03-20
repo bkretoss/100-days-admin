@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { Eye } from "lucide-react";
 import { toast } from "sonner";
@@ -10,6 +11,7 @@ interface LoginPageProps {
 }
 
 const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("admin@100days.app");
   const [password, setPassword] = useState("password123");
   const [showPassword, setShowPassword] = useState(false);
@@ -85,7 +87,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                 </div>
                 <span className="text-xs font-bold text-gray-400 group-hover:text-gray-300 transition-colors">Remember me</span>
               </label>
-              <button type="button" className="text-xs font-bold text-indigo-400 hover:text-indigo-300 transition-colors">Forgot password?</button>
+              <button type="button" onClick={() => navigate("/forgot-password")} className="text-xs font-bold text-indigo-400 hover:text-indigo-300 transition-colors">Forgot password?</button>
             </div>
 
             <button type="submit" className="w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-blue-600/20 mt-4">
