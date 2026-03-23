@@ -160,10 +160,10 @@ const UserDetail: React.FC = () => {
               {[
                 { icon: BarChart3, label: "Job Title", value: detail.jobTitle || "Not specified" },
                 { icon: Trophy, label: "Industry", value: detail.industry || "Not specified" },
-                { icon: Calendar, label: "Geographic Scope", value: "Country" },
-                { icon: BarChart3, label: "Company Type", value: "Public Company" },
+                { icon: Calendar, label: "Geographic Scope", value: detail.geoScope || "Not specified" },
+                { icon: BarChart3, label: "Company Type", value: detail.companyType || "Not specified" },
                 { icon: Calendar, label: "Location", value: detail.location || "Not specified" },
-                { icon: Calendar, label: "Start Date", value: user ? formatDate(user.startDate) : "—" },
+                { icon: Calendar, label: "Start Date", value: detail.startDate ? formatDate(detail.startDate) : "—" },
               ].map(({ icon: Icon, label, value }) => (
                 <div key={label} className="space-y-2">
                   <div className="flex items-center gap-2 text-gray-400 text-xs font-bold uppercase tracking-widest">

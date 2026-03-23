@@ -85,6 +85,9 @@ export interface AdminUserDetail {
   jobTitle: string;
   industry: string;
   location: string;
+  companyType: string;
+  geoScope: string;
+  startDate: string;
 }
 
 function unwrapPayload(raw: unknown): Record<string, unknown> | null {
@@ -123,6 +126,9 @@ export async function fetchAdminUserById(userId: string): Promise<AdminUserDetai
   const jobTitle = pickString(profile ?? {}, ["jobTitle", "job_title"]) ?? "";
   const industry = pickString(profile ?? {}, ["industry"]) ?? "";
   const location = pickString(profile ?? {}, ["location"]) ?? "";
+  const companyType = pickString(profile ?? {}, ["companyType", "company_type"]) ?? "";
+  const geoScope = pickString(profile ?? {}, ["geoScope", "geo_scope", "geographicScope"]) ?? "";
+  const startDate = pickString(profile ?? {}, ["startDate", "start_date"]) ?? "";
   const email = pickString(o, ["email"]) ?? "";
   const displayName = pickString(o, ["displayName", "name"]) ?? "";
   const profileImageUrl = pickString(o, ["profileImageUrl", "image", "avatar"]);
@@ -133,5 +139,8 @@ export async function fetchAdminUserById(userId: string): Promise<AdminUserDetai
     jobTitle,
     industry,
     location,
+    companyType,
+    geoScope,
+    startDate,
   };
 }
