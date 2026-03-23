@@ -1,33 +1,61 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
-import { cn } from "../lib/utils";
-import { STATS, USERS } from "../data/mockData";
+import { STATS } from "../data/mockData";
+import { fetchAdminUsers } from "../services/usersApi";
 import StatCard from "../components/ui/StatCard";
 
-interface DashboardPageProps {
-  couponsCount: number;
-}
+const RECENT_USERS = [
+  { id: 1,  name: "Sarah Chen",         email: "sarah@email.com",    day: 67,  progress: 67  },
+  { id: 2,  name: "Marcus Johnson",      email: "marcus@email.com",   day: 34,  progress: 34  },
+  { id: 3,  name: "Emily Davis",         email: "emily@email.com",    day: 89,  progress: 89  },
+  { id: 4,  name: "Alex Rivera",         email: "alex@email.com",     day: 12,  progress: 12  },
+  { id: 5,  name: "Jordan Lee",          email: "jordan@email.com",   day: 100, progress: 100 },
+  { id: 6,  name: "Taylor Swift",        email: "taylor@email.com",   day: 13,  progress: 13  },
+  { id: 7,  name: "Chris Evans",         email: "chris@email.com",    day: 45,  progress: 45  },
+  { id: 8,  name: "Zoe Kravitz",         email: "zoe@email.com",      day: 100, progress: 100 },
+  { id: 9,  name: "Robert Downey",       email: "robert@email.com",   day: 5,   progress: 5   },
+  { id: 10, name: "Scarlett Johansson",  email: "scarlett@email.com", day: 78,  progress: 78  },
+  { id: 11, name: "Tom Holland",         email: "tom@email.com",      day: 22,  progress: 22  },
+  { id: 12, name: "Zendaya Coleman",     email: "zendaya@email.com",  day: 95,  progress: 95  },
+];
 
-const DashboardPage: React.FC<DashboardPageProps> = ({ couponsCount }) => {
+const DASHBOARD_STATS = STATS.filter((stat) => stat.label !== "Coupon Codes");
+
+const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
+  const [totalUsers, setTotalUsers] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetchAdminUsers(1, 100)
+      .then((rows) => setTotalUsers(rows.length))
+      .catch(() => setTotalUsers(null));
+  }, []);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-8">
       <section>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-          {STATS.map((stat, i) => (
-            <StatCard
-              key={i}
-              label={stat.label}
-              value={stat.label === "Coupon Codes" ? couponsCount : stat.value}
-              icon={stat.icon}
-              color={stat.color}
-              bg={stat.bg}
-              glow={stat.glow}
-              delay={i * 0.1}
-            />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {DASHBOARD_STATS.map((stat, i) => (
+            <div
+              key={stat.label}
+              onClick={() => {
+                if (stat.label === "Total Users") navigate("/users");
+                else if (stat.label === "Active Subscriptions") navigate("/subscriptions?status=Active");
+              }}
+              className={stat.label === "Total Users" || stat.label === "Active Subscriptions" ? "cursor-pointer" : ""}
+            >
+              <StatCard
+                label={stat.label}
+                value={stat.label === "Total Users" && totalUsers !== null ? totalUsers : stat.value}
+                icon={stat.icon}
+                color={stat.color}
+                bg={stat.bg}
+                glow={stat.glow}
+                delay={i * 0.1}
+              />
+            </div>
           ))}
         </div>
       </section>
@@ -52,7 +80,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ couponsCount }) => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
-                {USERS.map((user) => (
+                {RECENT_USERS.map((user) => (
                   <tr key={user.id} className="hover:bg-white/[0.02] transition-colors cursor-pointer" onClick={() => navigate(`/users/${user.id}`)}>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">

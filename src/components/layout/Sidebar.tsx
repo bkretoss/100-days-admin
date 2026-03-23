@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { LayoutDashboard, Users, Tag, Receipt, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, Receipt, LogOut } from "lucide-react";
 import { cn } from "../../lib/utils";
 import type { AuthUser } from "../../types";
 
@@ -37,7 +37,6 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onLogout }) => {
       <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
         <SidebarItem icon={LayoutDashboard} label="Dashboard" active={pathname === "/dashboard" || pathname === "/"} to="/dashboard" />
         <SidebarItem icon={Users} label="Users" active={pathname.startsWith("/users")} to="/users" />
-        <SidebarItem icon={Tag} label="Coupons" active={pathname === "/coupons"} to="/coupons" />
         <SidebarItem icon={Receipt} label="Subscriptions" active={pathname === "/subscriptions"} to="/subscriptions" />
       </nav>
 
