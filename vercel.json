@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/proxy/:path*",
+      "destination": "https://my100days-mobile.replit.app/api/:path*"
+    }
+  ]
+}
