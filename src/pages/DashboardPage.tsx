@@ -38,14 +38,7 @@ const DashboardPage: React.FC = () => {
       <section>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {DASHBOARD_STATS.map((stat, i) => (
-            <div
-              key={stat.label}
-              onClick={() => {
-                if (stat.label === "Total Users") navigate("/users");
-                else if (stat.label === "Active Subscriptions") navigate("/subscriptions?status=Active");
-              }}
-              className={stat.label === "Total Users" || stat.label === "Active Subscriptions" ? "cursor-pointer" : ""}
-            >
+            <div key={stat.label}>
               <StatCard
                 label={stat.label}
                 value={stat.label === "Total Users" && totalUsers !== null ? totalUsers : stat.value}
