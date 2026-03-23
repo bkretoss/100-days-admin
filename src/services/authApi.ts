@@ -1,8 +1,7 @@
 import axios from "axios";
 import type { AuthUser } from "../types";
 
-// const ADMIN_LOGIN_URL = "https://my100days-mobile.replit.app/api/admin/login";
-const ADMIN_LOGIN_URL = "/api/admin/login";
+const ADMIN_LOGIN_URL = "https://my100days-mobile.replit.app/api/admin/login";
 
 export interface AdminLoginCredentials {
   email: string;
