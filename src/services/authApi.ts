@@ -1,8 +1,7 @@
 import axios from "axios";
 import type { AuthUser } from "../types";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api/proxy/admin";
-const ADMIN_LOGIN_URL = `${API_BASE}/login`;
+const ADMIN_LOGIN_URL = "https://my100days-mobile.replit.app/api/admin/login";
 
 export interface AdminLoginCredentials {
   email: string;
