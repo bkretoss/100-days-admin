@@ -1,5 +1,4 @@
-import axios from "axios";
-import { getToken } from "../lib/authStorage";
+import apiClient from "../lib/apiClient";
 
 const USERS_URL = "https://my100days-mobile.replit.app/api/admin/users";
 
@@ -11,6 +10,8 @@ export interface AdminUsersApiRow {
   email: string;
   /** Maps from API profileImageUrl */
   image: string | null;
+  /** Maps from API createdAt */
+  createdAt: string | null;
 }
 
 function pickString(obj: Record<string, unknown>, keys: string[]): string | null {
@@ -35,12 +36,14 @@ function mapRow(raw: unknown): AdminUsersApiRow | null {
   const name = pickString(o, ["displayName", "name", "fullName", "full_name", "username"]);
   const email = pickString(o, ["email"]);
   const image = pickString(o, ["profileImageUrl", "image", "avatar", "picture", "photo", "profileImage", "profile_image"]);
+  const createdAt = pickString(o, ["createdAt", "created_at", "createdDate", "created_date"]);
   if (!name && !email) return null;
   return {
     id,
     name: name ?? "",
     email: email ?? "",
     image,
+    createdAt,
   };
 }
 
@@ -62,16 +65,8 @@ function extractList(data: unknown): unknown[] {
 }
 
 export async function fetchAdminUsers(page: number, limit: number): Promise<AdminUsersApiRow[]> {
-  const token = getToken();
-  if (!token) {
-    throw new Error("Not authenticated");
-  }
-  const { data } = await axios.get(USERS_URL, {
+  const { data } = await apiClient.get(USERS_URL, {
     params: { page, limit },
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
   });
   return extractList(data)
     .map(mapRow)
@@ -100,24 +95,11 @@ function unwrapPayload(raw: unknown): Record<string, unknown> | null {
 }
 
 export async function deleteAdminUser(userId: string): Promise<void> {
-  const token = getToken();
-  if (!token) throw new Error("Not authenticated");
-  await axios.delete(`${USERS_URL}/${encodeURIComponent(userId)}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  await apiClient.delete(`${USERS_URL}/${encodeURIComponent(userId)}`);
 }
 
 export async function fetchAdminUserById(userId: string): Promise<AdminUserDetail> {
-  const token = getToken();
-  if (!token) {
-    throw new Error("Not authenticated");
-  }
-  const { data } = await axios.get(`${USERS_URL}/${encodeURIComponent(userId)}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
+  const { data } = await apiClient.get(`${USERS_URL}/${encodeURIComponent(userId)}`);
   const o = unwrapPayload(data);
   if (!o) {
     throw new Error("Invalid user response");
