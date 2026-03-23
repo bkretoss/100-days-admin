@@ -1,7 +1,8 @@
 import axios from "axios";
 import { getToken } from "../lib/authStorage";
 
-const USERS_URL = "https://my100days-mobile.replit.app/api/admin/users";
+// const USERS_URL = "https://my100days-mobile.replit.app/api/admin/users";
+const USERS_URL = "/api/admin/users";
 
 export interface AdminUsersApiRow {
   /** API user id (UUID) for routing to /users/:id */
