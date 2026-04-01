@@ -1,6 +1,8 @@
 import apiClient from "../lib/apiClient";
 
-const USERS_URL = "https://my100days-mobile.replit.app/api/admin/users";
+// const USERS_URL = "https://my100days-mobile.replit.app/api/admin/users";
+const USERS_URL = `${import.meta.env.VITE_API_BASE_URL}/users`;
+
 
 export interface AdminUsersApiRow {
   /** API user id (UUID) for routing to /users/:id */

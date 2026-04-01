@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { Search, Receipt, CheckCircle, AlertCircle, Filter, CreditCard, Calendar, Tag } from "lucide-react";
+import { Search, Receipt, CheckCircle, AlertCircle, Filter, CreditCard, Calendar } from "lucide-react";
 import { cn, formatDate } from "../lib/utils";
 import { SUBSCRIPTIONS } from "../data/mockData";
 import StatCard from "../components/ui/StatCard";
@@ -84,7 +84,7 @@ const SubscriptionsPage: React.FC = () => {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-white/5 text-gray-400 text-xs uppercase tracking-wider font-bold">
-                {["User Name", "Plan", "Status", "Start Date", "End Date", "Coupon Code", "Device Type"].map((h) => <th key={h} className="px-6 py-4">{h}</th>)}
+                {["User Name", "Plan", "Status", "Start Date", "End Date", "Device Type"].map((h) => <th key={h} className="px-6 py-4">{h}</th>)}
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
@@ -108,13 +108,6 @@ const SubscriptionsPage: React.FC = () => {
                   <td className="px-6 py-4 text-sm text-gray-300 font-medium">{formatDate(sub.endDate)}</td>
                   <td className="px-6 py-4">
                     {sub.couponCode ? (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-electric-purple/10 text-electric-purple border border-electric-purple/20">
-                        <Tag className="w-3 h-3" />{sub.couponCode}
-                      </span>
-                    ) : <span className="text-xs text-gray-500 font-medium">Not Used</span>}
-                  </td>
-                  <td className="px-6 py-4">
-                    {sub.couponCode ? (
                       <span className={cn("inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold tracking-widest border", sub.device_type === "ios" ? "bg-electric-blue/10 text-electric-blue border-electric-blue/20" : "bg-green-500/10 text-green-400 border-green-500/20")}>
                         {sub.device_type === "ios" ? "iOS" : "Android"}
                       </span>
@@ -122,7 +115,7 @@ const SubscriptionsPage: React.FC = () => {
                   </td>
                 </tr>
               )) : (
-                <tr><td colSpan={7} className="px-6 py-12 text-center"><Receipt className="w-12 h-12 text-gray-600 mx-auto mb-4" /><p className="text-gray-500 font-medium">No subscriptions found</p></td></tr>
+                <tr><td colSpan={6} className="px-6 py-12 text-center"><Receipt className="w-12 h-12 text-gray-600 mx-auto mb-4" /><p className="text-gray-500 font-medium">No subscriptions found</p></td></tr>
               )}
             </tbody>
           </table>
