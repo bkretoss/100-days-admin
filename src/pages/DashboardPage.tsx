@@ -8,6 +8,7 @@ import ConfirmationModal from "../components/ui/ConfirmationModal";
 import { cn, formatDate } from "../lib/utils";
 import { STATS } from "../data/mockData";
 import { fetchAdminUsers, type AdminUsersApiRow } from "../services/usersApi";
+import { fetchSubscriptions } from "../services/subscriptionsApi";
 import StatCard from "../components/ui/StatCard";
 
 const DASHBOARD_STATS = STATS.filter((stat) => stat.label !== "Coupon Codes");
@@ -15,6 +16,8 @@ const DASHBOARD_STATS = STATS.filter((stat) => stat.label !== "Coupon Codes");
 const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
   const [totalUsers, setTotalUsers] = useState<number | null>(null);
+  const [activeSubscriptions, setActiveSubscriptions] = useState<number | null>(null);
+  const [expiredSubscriptions, setExpiredSubscriptions] = useState<number | null>(null);
   const [recentUsers, setRecentUsers] = useState<AdminUsersApiRow[]>([]);
   const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean; apiUserId: string | null }>({ isOpen: false, apiUserId: null });
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -22,6 +25,14 @@ const DashboardPage: React.FC = () => {
   const [usersError, setUsersError] = useState(false);
 
   useEffect(() => {
+    fetchSubscriptions(1, 1, "active")
+      .then((res) => setActiveSubscriptions(res.pagination.total_records))
+      .catch(() => {});
+
+    fetchSubscriptions(1, 1, "expired")
+      .then((res) => setExpiredSubscriptions(res.pagination.total_records))
+      .catch(() => {});
+
     fetchAdminUsers(1, 100)
       .then((rows) => {
         setTotalUsers(rows.length);
@@ -66,7 +77,12 @@ const DashboardPage: React.FC = () => {
             <div key={stat.label}>
               <StatCard
                 label={stat.label}
-                value={stat.label === "Total Users" && totalUsers !== null ? totalUsers : stat.value}
+                value={
+                  stat.label === "Total Users" && totalUsers !== null ? totalUsers
+                  : stat.label === "Active Subscriptions" && activeSubscriptions !== null ? activeSubscriptions
+                  : stat.label === "Expired Subscriptions" && expiredSubscriptions !== null ? expiredSubscriptions
+                  : stat.value
+                }
                 icon={stat.icon}
                 color={stat.color}
                 bg={stat.bg}

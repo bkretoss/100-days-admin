@@ -30,7 +30,7 @@ export interface SubscriptionsResponse {
   pagination: SubscriptionsPagination;
 }
 
-export async function fetchSubscriptions(page = 1, limit = 10): Promise<SubscriptionsResponse> {
-  const { data } = await apiClient.get(SUBSCRIPTIONS_URL, { params: { page, limit } });
+export async function fetchSubscriptions(page = 1, limit = 10, status?: string): Promise<SubscriptionsResponse> {
+  const { data } = await apiClient.get(SUBSCRIPTIONS_URL, { params: { page, limit, ...(status && { status }) } });
   return { data: data.data, pagination: data.pagination };
 }
