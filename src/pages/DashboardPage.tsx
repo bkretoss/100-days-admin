@@ -122,8 +122,8 @@ const DashboardPage: React.FC = () => {
                   <tr><td colSpan={6} className="px-6 py-8 text-center text-gray-400">Loading data...</td></tr>
                 ) : usersError ? (
                   <tr><td colSpan={6} className="px-6 py-8 text-center text-red-400">Failed to load users.</td></tr>
-                ) : recentUsers.map((user, index) => {
-                  const s = STATIC_ROW_DATA[index % STATIC_ROW_DATA.length];
+                ) : recentUsers.map((user) => {
+                  const plan = user.subscription_plan ?? "";
                   return (
                     <tr key={user.id} className="hover:bg-white/[0.02] transition-colors cursor-pointer" onClick={() => navigate(`/users/${user.id}`)}>
                       <td className="px-6 py-4">
@@ -134,14 +134,22 @@ const DashboardPage: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-400">{user.email}</td>
                       <td className="px-6 py-4">
-                        <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-widest border", s.plan === "Yearly" ? "bg-electric-blue/10 text-electric-blue border-electric-blue/20" : "bg-green-500/10 text-green-400 border-green-500/20")}>
-                          {s.plan}
-                        </span>
+                        {plan && (
+                          <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-widest border", plan.toLowerCase() === "100 day access" ? "bg-electric-blue/10 text-electric-blue border-electric-blue/20" : "bg-green-500/10 text-green-400 border-green-500/20")}>
+                            {plan}
+                          </span>
+                        )}
                       </td>
                       <td className="px-6 py-4 text-center text-sm text-gray-400">{formatDate(user.createdAt)}</td>
                       <td className="px-6 py-4 text-center text-sm text-gray-400">
-                        <div className="font-medium text-gray-200">{formatDate(s.startDate)}</div>
-                        <div className="text-[10px] text-gray-500">to {formatDate(s.endDate)}</div>
+                        {user.subscription_start_date || user.subscription_end_date ? (
+                          <>
+                            <div className="font-medium text-gray-200">{formatDate(user.subscription_start_date)}</div>
+                            <div className="text-[10px] text-gray-500">to {formatDate(user.subscription_end_date)}</div>
+                          </>
+                        ) : (
+                          <span className="text-gray-600">—</span>
+                        )}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">
@@ -165,19 +173,6 @@ const DashboardPage: React.FC = () => {
     </motion.div>
   );
 };
-
-const STATIC_ROW_DATA = [
-  { plan: "Yearly",  startDate: "12-10-2023", endDate: "20-01-2024" },
-  { plan: "Monthly", startDate: "15-01-2024", endDate: "25-04-2024" },
-  { plan: "Monthly", startDate: "05-05-2023", endDate: "13-08-2023" },
-  { plan: "Yearly",  startDate: "01-01-2024", endDate: "10-04-2024" },
-  { plan: "Monthly", startDate: "20-05-2023", endDate: "28-08-2023" },
-  { plan: "Yearly",  startDate: "01-03-2024", endDate: "09-06-2024" },
-  { plan: "Yearly",  startDate: "10-02-2024", endDate: "21-05-2024" },
-  { plan: "Monthly", startDate: "15-06-2023", endDate: "23-09-2023" },
-  { plan: "Monthly", startDate: "10-01-2024", endDate: "20-04-2024" },
-  { plan: "Yearly",  startDate: "01-12-2023", endDate: "10-03-2024" },
-];
 
 function RecentUserAvatar({ name, imageUrl }: { name: string; imageUrl: string | null }) {
   const [failed, setFailed] = useState(false);

@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "motion/react";
 import { ChevronLeft, CreditCard, Receipt, BarChart3, Trophy, Calendar } from "lucide-react";
 import { cn, formatDate } from "../lib/utils";
-import { USERS, SUBSCRIPTIONS } from "../data/mockData";
 import { fetchAdminUserById, type AdminUserDetail } from "../services/usersApi";
 
 const UserDetail: React.FC = () => {
@@ -14,8 +13,7 @@ const UserDetail: React.FC = () => {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [imgFailed, setImgFailed] = useState(false);
 
-  const numericId = id !== undefined ? Number(id) : NaN;
-  const mockUser = id !== undefined && !Number.isNaN(numericId) ? USERS.find((u) => u.id === numericId) : undefined;
+
 
   useEffect(() => {
     if (!id) {
@@ -50,9 +48,7 @@ const UserDetail: React.FC = () => {
     setImgFailed(false);
   }, [detail?.profileImageUrl]);
 
-  const user = mockUser;
-  const userSubscriptions = user ? SUBSCRIPTIONS.filter((sub) => sub.userId === user.id) : [];
-  const activeSubscription = userSubscriptions.find((sub) => sub.status === "Active") || userSubscriptions[0];
+
 
   if (loading) {
     return (
@@ -143,50 +139,42 @@ const UserDetail: React.FC = () => {
                 <p className="text-xs text-gray-500">Active Plan Details</p>
               </div>
             </div>
-            <div className="space-y-4">
-              {[
-                {
-                  label: "Current Plan",
-                  value: <span className="text-sm font-bold text-white">{user?.plan ?? "—"}</span>,
-                },
-                {
-                  label: "Start Date",
-                  value: (
-                    <span className="text-sm font-bold text-white">{user ? formatDate(user.startDate) : "—"}</span>
-                  ),
-                },
-                {
-                  label: "End Date",
-                  value: <span className="text-sm font-bold text-white">{user ? formatDate(user.endDate) : "—"}</span>,
-                },
-              ].map(({ label, value }, i, arr) => (
-                <div
-                  key={label}
-                  className={cn(
-                    "flex justify-between items-center py-3",
-                    i < arr.length - 1 && "border-b border-white/5",
-                  )}
-                >
-                  <span className="text-sm text-gray-400">{label}</span>
-                  {value}
-                </div>
-              ))}
-              {activeSubscription && (
-                <div className="flex justify-between items-center py-3 border-t border-white/5">
-                  <span className="text-sm text-gray-400">Device Type</span>
-                  <span
+            {detail.current_subscription ? (
+              <div className="space-y-4">
+                {([
+                  { label: "Plan", value: detail.current_subscription.plan_name },
+                  { label: "Device Type", value: detail.current_subscription.device_type ?? "—" },
+                  { label: "Start Date", value: formatDate(detail.current_subscription.start_date) },
+                  { label: "End Date", value: formatDate(detail.current_subscription.end_date) },
+                ] as { label: string; value: string }[]).map(({ label, value }, i, arr) => (
+                  <div
+                    key={label}
                     className={cn(
-                      "inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold tracking-widest border",
-                      activeSubscription.device_type === "ios"
-                        ? "bg-electric-blue/10 text-electric-blue border-electric-blue/20"
-                        : "bg-green-500/10 text-green-400 border-green-500/20",
+                      "flex justify-between items-center py-3",
+                      i < arr.length - 1 && "border-b border-white/5",
                     )}
                   >
-                    {activeSubscription.device_type === "ios" ? "iOS" : "Android"}
+                    <span className="text-sm text-gray-400">{label}</span>
+                    <span className="text-sm font-bold text-white">{value}</span>
+                  </div>
+                ))}
+                <div className="flex justify-between items-center py-3 border-t border-white/5">
+                  <span className="text-sm text-gray-400">Status</span>
+                  <span
+                    className={cn(
+                      "inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold tracking-widest border uppercase",
+                      detail.current_subscription.status.toLowerCase() === "active"
+                        ? "bg-green-500/10 text-green-400 border-green-500/20"
+                        : "bg-red-500/10 text-red-400 border-red-500/20",
+                    )}
+                  >
+                    {detail.current_subscription.status}
                   </span>
                 </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500 py-4 text-center">No active subscription</p>
+            )}
           </div>
         </div>
 
@@ -230,57 +218,33 @@ const UserDetail: React.FC = () => {
                 <p className="text-xs text-gray-500">All subscriptions for this user</p>
               </div>
             </div>
-            {userSubscriptions.length > 0 ? (
+            {detail.subscription_history.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-white/5 text-gray-400 text-[10px] uppercase tracking-wider font-bold">
-                      {["Plan", "Status", "Start Date", "End Date", "Device Type"].map((h) => (
-                        <th key={h} className="px-4 py-3">
-                          {h}
-                        </th>
+                      {["Plan Name", "Device Type", "Start Date", "End Date", "Status"].map((h) => (
+                        <th key={h} className="px-4 py-3">{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5">
-                    {userSubscriptions.map((sub) => (
-                      <tr key={sub.id} className="hover:bg-white/[0.02] transition-colors">
-                        <td className="px-4 py-3">
-                          <span
-                            className={cn(
-                              "inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black tracking-widest border",
-                              sub.plan === "Yearly"
-                                ? "bg-electric-blue/10 text-electric-blue border-electric-blue/20"
-                                : "bg-green-500/10 text-green-400 border-green-500/20",
-                            )}
-                          >
-                            {sub.plan}
-                          </span>
-                        </td>
+                    {detail.subscription_history.map((sub, idx) => (
+                      <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
+                        <td className="px-4 py-3 text-xs text-gray-300 font-medium">{sub.plan_name}</td>
+                        <td className="px-4 py-3 text-xs text-gray-300 font-medium">{sub.device_type ?? "—"}</td>
+                        <td className="px-4 py-3 text-xs text-gray-300 font-medium">{formatDate(sub.start_date)}</td>
+                        <td className="px-4 py-3 text-xs text-gray-300 font-medium">{formatDate(sub.end_date)}</td>
                         <td className="px-4 py-3">
                           <span
                             className={cn(
                               "inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border",
-                              sub.status === "Active"
+                              sub.status.toLowerCase() === "active"
                                 ? "bg-green-500/10 text-green-400 border-green-500/20"
                                 : "bg-red-500/10 text-red-400 border-red-500/20",
                             )}
                           >
                             {sub.status}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-xs text-gray-300 font-medium">{formatDate(sub.startDate)}</td>
-                        <td className="px-4 py-3 text-xs text-gray-300 font-medium">{formatDate(sub.endDate)}</td>
-                        <td className="px-4 py-3">
-                          <span
-                            className={cn(
-                              "inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold tracking-widest border",
-                              sub.device_type === "ios"
-                                ? "bg-electric-blue/10 text-electric-blue border-electric-blue/20"
-                                : "bg-green-500/10 text-green-400 border-green-500/20",
-                            )}
-                          >
-                            {sub.device_type === "ios" ? "iOS" : "Android"}
                           </span>
                         </td>
                       </tr>
@@ -291,7 +255,7 @@ const UserDetail: React.FC = () => {
             ) : (
               <div className="text-center py-8">
                 <Receipt className="w-10 h-10 text-gray-600 mx-auto mb-3" />
-                <p className="text-gray-500 text-sm font-medium">No subscription history found</p>
+                <p className="text-gray-500 text-sm font-medium">No Subscription History Found</p>
               </div>
             )}
           </div>

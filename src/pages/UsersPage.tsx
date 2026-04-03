@@ -9,19 +9,6 @@ import StatCard from "../components/ui/StatCard";
 import Pagination from "../components/ui/Pagination";
 import ConfirmationModal from "../components/ui/ConfirmationModal";
 
-const STATIC_ROW_DATA = [
-  { plan: "Yearly", startDate: "12-10-2023", endDate: "20-01-2024" },
-  { plan: "Monthly", startDate: "15-01-2024", endDate: "25-04-2024" },
-  { plan: "Monthly", startDate: "05-05-2023", endDate: "13-08-2023" },
-  { plan: "Yearly", startDate: "01-01-2024", endDate: "10-04-2024" },
-  { plan: "Monthly", startDate: "20-05-2023", endDate: "28-08-2023" },
-  { plan: "Yearly", startDate: "01-03-2024", endDate: "09-06-2024" },
-  { plan: "Yearly", startDate: "10-02-2024", endDate: "21-05-2024" },
-  { plan: "Monthly", startDate: "15-06-2023", endDate: "23-09-2023" },
-  { plan: "Monthly", startDate: "10-01-2024", endDate: "20-04-2024" },
-  { plan: "Yearly", startDate: "01-12-2023", endDate: "10-03-2024" },
-];
-
 const UsersPage: React.FC = () => {
   const navigate = useNavigate();
   const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean; apiUserId: string | null }>({
@@ -103,15 +90,15 @@ const UsersPage: React.FC = () => {
         />
         <StatCard
           label="Monthly Users"
-          value={1}
+          value={apiRows.filter((r) => r.subscription_plan?.toLowerCase() === "monthly").length}
           icon={Calendar}
           color="text-green-400"
           bg="bg-green-500/10"
           delay={0.1}
         />
         <StatCard
-          label="Yearly Users"
-          value={1}
+          label="100 Day Users"
+          value={apiRows.filter((r) => r.subscription_plan?.toLowerCase() === "100 day access").length}
           icon={Calendar}
           color="text-electric-purple"
           bg="bg-electric-purple/10"
@@ -157,9 +144,8 @@ const UsersPage: React.FC = () => {
                   </td>
                 </tr>
               ) : paginatedRows.length > 0 ? (
-                paginatedRows.map((row, rowIndex) => {
-                  const staticIndex = (currentPage - 1) * itemsPerPage + rowIndex;
-                  const s = STATIC_ROW_DATA[staticIndex % STATIC_ROW_DATA.length];
+                paginatedRows.map((row) => {
+                  const plan = row.subscription_plan ?? "";
                   return (
                     <tr
                       key={row.id}
@@ -177,18 +163,24 @@ const UsersPage: React.FC = () => {
                         <span
                           className={cn(
                             "inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-widest border",
-                            s.plan === "Yearly"
+                            plan.toLowerCase() === "100 day access"
                               ? "bg-electric-blue/10 text-electric-blue border-electric-blue/20"
                               : "bg-green-500/10 text-green-400 border-green-500/20",
                           )}
                         >
-                          {s.plan}
+                          {plan || "—"}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-center text-sm text-gray-400">{formatDate(row.createdAt)}</td>
                       <td className="px-6 py-4 text-center text-sm text-gray-400">
-                        <div className="font-medium text-gray-200">{formatDate(s.startDate)}</div>
-                        <div className="text-[10px] text-gray-500">to {formatDate(s.endDate)}</div>
+                        {row.subscription_start_date || row.subscription_end_date ? (
+                          <>
+                            <div className="font-medium text-gray-200">{formatDate(row.subscription_start_date)}</div>
+                            <div className="text-[10px] text-gray-500">to {formatDate(row.subscription_end_date)}</div>
+                          </>
+                        ) : (
+                          <span className="text-gray-600">—</span>
+                        )}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">

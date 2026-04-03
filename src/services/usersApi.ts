@@ -14,6 +14,12 @@ export interface AdminUsersApiRow {
   image: string | null;
   /** Maps from API createdAt */
   createdAt: string | null;
+  /** Maps from API subscription_plan */
+  subscription_plan: string | null;
+  /** Maps from API subscription_start_date */
+  subscription_start_date: string | null;
+  /** Maps from API subscription_end_date */
+  subscription_end_date: string | null;
 }
 
 function pickString(obj: Record<string, unknown>, keys: string[]): string | null {
@@ -39,6 +45,9 @@ function mapRow(raw: unknown): AdminUsersApiRow | null {
   const email = pickString(o, ["email"]);
   const image = pickString(o, ["profileImageUrl", "image", "avatar", "picture", "photo", "profileImage", "profile_image"]);
   const createdAt = pickString(o, ["createdAt", "created_at", "createdDate", "created_date"]);
+  const subscription_plan = pickString(o, ["subscription_plan", "subscriptionPlan", "plan"]);
+  const subscription_start_date = pickString(o, ["subscription_start_date"]);
+  const subscription_end_date = pickString(o, ["subscription_end_date"]);
   if (!name && !email) return null;
   return {
     id,
@@ -46,6 +55,9 @@ function mapRow(raw: unknown): AdminUsersApiRow | null {
     email: email ?? "",
     image,
     createdAt,
+    subscription_plan,
+    subscription_start_date,
+    subscription_end_date,
   };
 }
 
@@ -75,16 +87,28 @@ export async function fetchAdminUsers(page: number, limit: number): Promise<Admi
     .filter((r): r is AdminUsersApiRow => r !== null);
 }
 
+export interface SubscriptionRecord {
+  plan_name: string;
+  device_type: string | null;
+  start_date: string;
+  end_date: string;
+  status: string;
+  purchase_platform: string | null;
+}
+
 export interface AdminUserDetail {
   email: string;
   displayName: string;
   profileImageUrl: string | null;
+  device_type: string | null;
   jobTitle: string;
   industry: string;
   location: string;
   companyType: string;
   geoScope: string;
   startDate: string;
+  current_subscription: SubscriptionRecord | null;
+  subscription_history: SubscriptionRecord[];
 }
 
 function unwrapPayload(raw: unknown): Record<string, unknown> | null {
@@ -116,15 +140,31 @@ export async function fetchAdminUserById(userId: string): Promise<AdminUserDetai
   const email = pickString(o, ["email"]) ?? "";
   const displayName = pickString(o, ["displayName", "name"]) ?? "";
   const profileImageUrl = pickString(o, ["profileImageUrl", "image", "avatar"]);
+  const device_type = pickString(o, ["device_type", "deviceType"]);
+
+  const rawCurrent = o.current_subscription;
+  const current_subscription: SubscriptionRecord | null =
+    rawCurrent && typeof rawCurrent === "object"
+      ? (rawCurrent as SubscriptionRecord)
+      : null;
+
+  const rawHistory = o.subscription_history;
+  const subscription_history: SubscriptionRecord[] = Array.isArray(rawHistory)
+    ? (rawHistory as SubscriptionRecord[])
+    : [];
+
   return {
     email,
     displayName,
     profileImageUrl,
+    device_type,
     jobTitle,
     industry,
     location,
     companyType,
     geoScope,
     startDate,
+    current_subscription,
+    subscription_history,
   };
 }
