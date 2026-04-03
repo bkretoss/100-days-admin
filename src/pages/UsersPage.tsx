@@ -160,16 +160,20 @@ const UsersPage: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-400">{row.email}</td>
                       <td className="px-6 py-4">
-                        <span
-                          className={cn(
-                            "inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-widest border",
-                            plan.toLowerCase() === "100 day access"
-                              ? "bg-electric-blue/10 text-electric-blue border-electric-blue/20"
-                              : "bg-green-500/10 text-green-400 border-green-500/20",
-                          )}
-                        >
-                          {plan || "—"}
-                        </span>
+                        {plan ? (
+                          <span
+                            className={cn(
+                              "inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-widest border",
+                              plan.toLowerCase() === "100 day access"
+                                ? "bg-electric-blue/10 text-electric-blue border-electric-blue/20"
+                                : "bg-green-500/10 text-green-400 border-green-500/20",
+                            )}
+                          >
+                            {plan}
+                          </span>
+                        ) : (
+                          <span className="text-gray-600">-</span>
+                        )}
                       </td>
                       <td className="px-6 py-4 text-center text-sm text-gray-400">{formatDate(row.createdAt)}</td>
                       <td className="px-6 py-4 text-center text-sm text-gray-400">
@@ -179,7 +183,7 @@ const UsersPage: React.FC = () => {
                             <div className="text-[10px] text-gray-500">to {formatDate(row.subscription_end_date)}</div>
                           </>
                         ) : (
-                          <span className="text-gray-600">—</span>
+                          <span className="text-gray-600">-</span>
                         )}
                       </td>
                       <td className="px-6 py-4 text-right">
