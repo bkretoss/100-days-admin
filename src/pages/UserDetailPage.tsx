@@ -143,7 +143,7 @@ const UserDetail: React.FC = () => {
               <div className="space-y-4">
                 {([
                   { label: "Plan", value: detail.current_subscription.plan_name },
-                  { label: "Device Type", value: detail.current_subscription.device_type ?? "—" },
+                  { label: "Device Type", value: detail.device_type ?? "—" },
                   { label: "Start Date", value: formatDate(detail.current_subscription.start_date) },
                   { label: "End Date", value: formatDate(detail.current_subscription.end_date) },
                 ] as { label: string; value: string }[]).map(({ label, value }, i, arr) => (
@@ -232,7 +232,7 @@ const UserDetail: React.FC = () => {
                     {detail.subscription_history.map((sub, idx) => (
                       <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
                         <td className="px-4 py-3 text-xs text-gray-300 font-medium">{sub.plan_name}</td>
-                        <td className="px-4 py-3 text-xs text-gray-300 font-medium">{sub.device_type ?? "—"}</td>
+                        <td className="px-4 py-3 text-xs text-gray-300 font-medium">{sub.purchase_platform ?? detail.device_type ?? "—"}</td>
                         <td className="px-4 py-3 text-xs text-gray-300 font-medium">{formatDate(sub.start_date)}</td>
                         <td className="px-4 py-3 text-xs text-gray-300 font-medium">{formatDate(sub.end_date)}</td>
                         <td className="px-4 py-3">

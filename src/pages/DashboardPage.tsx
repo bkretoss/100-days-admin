@@ -11,7 +11,7 @@ import { fetchAdminUsers, type AdminUsersApiRow } from "../services/usersApi";
 import { fetchSubscriptions } from "../services/subscriptionsApi";
 import StatCard from "../components/ui/StatCard";
 
-const DASHBOARD_STATS = STATS.filter((stat) => stat.label !== "Coupon Codes");
+const DASHBOARD_STATS = STATS.filter((stat) => stat.label !== "Coupon Codes" && stat.label !== "Completed Challenges");
 
 const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -72,7 +72,7 @@ const DashboardPage: React.FC = () => {
         isLoading={deleteLoading}
       />
       <section>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {DASHBOARD_STATS.map((stat, i) => (
             <div key={stat.label}>
               <StatCard

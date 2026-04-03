@@ -99,14 +99,14 @@ const SubscriptionsPage: React.FC = () => {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-white/5 text-gray-400 text-xs uppercase tracking-wider font-bold">
-                {["User", "Plan", "Status", "Price", "Start Date", "End Date", "Remaining Days", "Device Type"].map((h) => <th key={h} className="px-6 py-4">{h}</th>)}
+                {["User", "Plan", "Status", "Start Date", "End Date", "Remaining Days", "Device Type"].map((h) => <th key={h} className="px-6 py-4">{h}</th>)}
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
               {loading ? (
-                <tr><td colSpan={8} className="px-6 py-12 text-center text-gray-500 font-medium">Loading subscriptions...</td></tr>
+                <tr><td colSpan={7} className="px-6 py-12 text-center text-gray-500 font-medium">Loading subscriptions...</td></tr>
               ) : error ? (
-                <tr><td colSpan={8} className="px-6 py-12 text-center text-red-400 font-medium">{error}</td></tr>
+                <tr><td colSpan={7} className="px-6 py-12 text-center text-red-400 font-medium">{error}</td></tr>
               ) : filtered.length > 0 ? filtered.map((sub) => (
                 <tr key={sub.id} className="hover:bg-white/[0.02] transition-colors group">
                   <td className="px-6 py-4">
@@ -130,7 +130,6 @@ const SubscriptionsPage: React.FC = () => {
                       {sub.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-300 font-medium">${sub.price}</td>
                   <td className="px-6 py-4 text-sm text-gray-300 font-medium">{formatDate(sub.start_date)}</td>
                   <td className="px-6 py-4 text-sm text-gray-300 font-medium">{formatDate(sub.end_date)}</td>
                   <td className="px-6 py-4 text-sm text-gray-300 font-medium">{sub.remaining_days} days</td>
@@ -143,7 +142,7 @@ const SubscriptionsPage: React.FC = () => {
                   </td>
                 </tr>
               )) : (
-                <tr><td colSpan={8} className="px-6 py-12 text-center"><Receipt className="w-12 h-12 text-gray-600 mx-auto mb-4" /><p className="text-gray-500 font-medium">No subscriptions found</p></td></tr>
+                <tr><td colSpan={7} className="px-6 py-12 text-center"><Receipt className="w-12 h-12 text-gray-600 mx-auto mb-4" /><p className="text-gray-500 font-medium">No subscriptions found</p></td></tr>
               )}
             </tbody>
           </table>
